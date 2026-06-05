@@ -6,5 +6,5 @@ venv/
 .env.local
 .DS_Store
 .vscode/settings.json
-*.doc
 *.docx
+*.doc
