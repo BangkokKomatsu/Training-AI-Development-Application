@@ -1,3 +1,4 @@
+import json
 import os
 from dotenv import load_dotenv
 from openai import AzureOpenAI
@@ -40,4 +41,29 @@ response = client.chat.completions.create(
     ],
 )
 
-print(response.choices[0].message.content)
+# Step 1: Parse JSON
+result = json.loads(response.choices[0].message.content)
+
+# Step 2: แสดง field แต่ละตัว
+print("=== IT Ticket Classification ===")
+print(f"Category      : {result['category']}")
+print(f"Priority      : {result['priority']}")
+print(f"Summary       : {result['summary']}")
+print(f"Assigned Team : {result['assigned_team']}")
+
+# Step 3: แสดง first_response ที่พร้อมส่งกลับ user
+print("\n=== First Response to User ===")
+print(result.get("first_response", ""))
+
+# TODO: ลองเพิ่ม routing ตาม category
+# TEAM_ROUTING = {
+#     "Account/Login": "IT Helpdesk L1",
+#     "ERP/System": "ERP Support Team",
+#     "Network": "Network Operations (NOC)",
+# }
+# team = TEAM_ROUTING.get(result["category"], "IT Helpdesk L1")
+# print(f"Route to: {team}")
+
+# TODO: ลองบันทึก ticket log ลงไฟล์
+# with open("ticket_log.json", "w", encoding="utf-8") as f:
+#     json.dump(result, f, ensure_ascii=False, indent=2)

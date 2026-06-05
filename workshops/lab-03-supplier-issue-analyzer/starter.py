@@ -46,5 +46,25 @@ response = client.chat.completions.create(
     ],
 )
 
-result = response.choices[0].message.content
-print(result)
+# Step 1: Parse JSON
+result = json.loads(response.choices[0].message.content)
+
+# Step 2: แสดง field แต่ละตัว
+print("=== Supplier Issue Analysis ===")
+print(f"Category  : {result['category']}")
+print(f"Priority  : {result['priority']}")
+print(f"Summary   : {result['summary']}")
+print(f"Missing   : {result.get('missing_information', '-')}")
+print(f"Action    : {result['recommended_action']}")
+
+# Step 3: แสดง Email Draft ที่พร้อม copy-paste ส่งกลับ supplier
+print("\n=== Email Draft (ready to send) ===")
+print(result.get("email_reply", ""))
+
+# TODO: ลองเพิ่ม routing ตาม priority
+# if result["priority"] == "High":
+#     print("แจ้ง Procurement Manager ทันที")
+
+# TODO: ลองบันทึกผลลัพธ์ลงไฟล์
+# with open("supplier_result.json", "w", encoding="utf-8") as f:
+#     json.dump(result, f, ensure_ascii=False, indent=2)
