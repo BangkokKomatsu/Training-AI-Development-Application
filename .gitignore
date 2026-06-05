@@ -8,3 +8,5 @@ venv/
 .vscode/settings.json
 *.docx
 *.doc
+*.png
+*.jpg

@@ -1,5 +1,7 @@
 # AI Application Development: Build Your First Mini AI Agent with Microsoft Foundry
 
+![AI Application Development Course](ChatGPT%20Image%20Jun%204%2C%202026%2C%2002_48_11%20PM.png)
+
 คู่มือประกอบการอบรมสำหรับหลักสูตร **AI Application Development** ของ BKC  
 เน้นการเรียนรู้การใช้งาน **Microsoft Foundry**, **API Key**, **Endpoint**, **Token**, **Prompt**, และการเขียนโปรแกรมด้วย **VS Code + Python** เพื่อสร้าง Mini AI Agent Prototype แบบง่าย
 
