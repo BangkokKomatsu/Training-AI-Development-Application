@@ -1,0 +1,25 @@
+# Workshops
+
+โฟลเดอร์นี้รวม Lab สำหรับการอบรม โดยแยกเนื้อหา Workshop ออกจากเอกสาร Lecture ในโฟลเดอร์ `docs/`
+
+## Workshop List
+
+| Lab | Folder | Goal |
+|---|---|---|
+| 1 | `lab-01-first-api-call` | เรียก AI Model ผ่าน Microsoft Foundry ครั้งแรก |
+| 2 | `lab-02-prompt-to-json` | เขียน Prompt ให้ได้ JSON output |
+| 3 | `lab-03-supplier-issue-analyzer` | สร้าง Mini AI Agent วิเคราะห์ Supplier Issue |
+| 4 | `lab-04-it-ticket-classifier` | สร้าง Mini AI Agent แยกประเภท IT Ticket |
+| 5 | `lab-05-mini-challenge` | ออกแบบ Use Case และ Prompt ของตนเอง |
+
+## Before Running Labs
+
+1. ติดตั้ง package
+
+```bash
+pip install -r requirements.txt
+```
+
+2. สร้างไฟล์ `.env` จาก `.env.example`
+3. ใส่ API Key, Endpoint, Deployment และ API Version ที่ได้รับจากผู้สอน
+4. รันไฟล์ `starter.py` ในแต่ละ Lab
