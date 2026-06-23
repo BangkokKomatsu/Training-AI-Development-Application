@@ -22,7 +22,7 @@ Input: ข้อมูลจริงที่ให้วิเคราะห�
 ## Template ตัวอย่าง
 
 ```text
-You are an AI assistant for supplier issue management at BKC.
+You are an AI assistant for factory issue management at BKC.
 
 Task:
 Analyze the issue report below.

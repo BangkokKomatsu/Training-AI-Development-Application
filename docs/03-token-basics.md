@@ -32,7 +32,7 @@ Summarize this issue.
 Prompt ที่ดีขึ้น:
 
 ```text
-Summarize this supplier issue in 3 bullet points. Include problem, impact, missing information, and next action.
+Summarize this factory issue in 3 bullet points. Include problem, impact, missing information, and next action.
 ```
 
 Prompt ที่ยาวขึ้นอาจให้ผลลัพธ์ดีขึ้น แต่ใช้ token มากขึ้น ผู้เรียนควรฝึกเขียน prompt ให้สมดุลระหว่างความชัดเจนและความกระชับ

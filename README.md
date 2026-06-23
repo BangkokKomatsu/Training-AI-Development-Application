@@ -44,14 +44,13 @@
 │   ├── 08-multi-turn-conversation.md
 │   └── 09-function-calling.md
 ├── sample-data/
-│   ├── supplier_issues.json
-│   └── it_tickets.json
+│   └── factory_issues.json
 └── workshops/
     ├── README.md
     ├── lab-01-first-api-call/
     ├── lab-02-prompt-to-json/
-    ├── lab-03-supplier-issue-analyzer/
-    ├── lab-04-it-ticket-classifier/
+    ├── lab-03-factory-issue-analyzer/
+    ├── lab-04-factory-issue-batch-excel/
     ├── lab-05-mini-challenge/
     ├── lab-06-multi-turn-chatbot/      (Bonus)
     └── lab-07-function-calling/        (Bonus)
@@ -86,11 +85,11 @@
 |---|---|---|
 | Lab 1 | First API Call | เรียก AI Model ผ่าน API สำเร็จครั้งแรก |
 | Lab 2 | Prompt to JSON | ให้ AI ตอบเป็น JSON ที่นำไปใช้ต่อได้ |
-| Lab 3 | Supplier Issue Analyzer | Mini AI Agent วิเคราะห์ปัญหา Supplier |
-| Lab 4 | IT Ticket Classifier | Mini AI Agent แยกประเภท IT Ticket |
+| Lab 3 | Factory Issue Analyzer | Mini AI Agent วิเคราะห์ปัญหาโรงงาน (Streamlit UI) |
+| Lab 4 | Factory Issue Batch Excel | ประมวลผลลูปคัดแยกปัญหาอัตโนมัติ (Pandas) |
 | Lab 5 | Mini Challenge | ผู้เรียนออกแบบ Use Case ของตัวเอง |
 | Lab 6 (Bonus) | Multi-turn Chatbot | Chatbot ที่จำบทสนทนาก่อนหน้าได้ |
-| Lab 7 (Bonus) | Function Calling | AI เรียกฟังก์ชัน Python เพื่อดึงข้อมูลจาก mock database |
+| Lab 7 (Bonus) | Function Calling | AI เรียกฟังก์ชัน Python เพื่อดึงข้อมูลสถานะเครื่องจักรจำลอง |
 
 ---
 

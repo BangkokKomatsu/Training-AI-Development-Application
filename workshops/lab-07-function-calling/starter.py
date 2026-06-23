@@ -13,16 +13,16 @@ client = AzureOpenAI(
 
 deployment_name = os.getenv("AZURE_OPENAI_DEPLOYMENT")
 
-# Mock database (สมมุติว่าเป็นข้อมูลจากระบบ ERP)
-SUPPLIER_DB = {
-    "SUP-001": {"status": "Delayed", "eta": "2026-06-20"},
-    "SUP-002": {"status": "On Time", "eta": "2026-06-15"},
-    "SUP-003": {"status": "Pending Documents", "eta": "-"},
+# Mock database (สมมุติว่าเป็นข้อมูลเซ็นเซอร์เครื่องจักร)
+MACHINE_DB = {
+    "MAC-001": {"status": "Overheating", "temperature_celsius": 85},
+    "MAC-002": {"status": "Normal", "temperature_celsius": 45},
+    "MAC-003": {"status": "Offline", "temperature_celsius": 0},
 }
 
 
-def get_supplier_status(supplier_id: str) -> dict:
-    return SUPPLIER_DB.get(supplier_id, {"status": "Unknown", "eta": "-"})
+def get_machine_status(machine_id: str) -> dict:
+    return MACHINE_DB.get(machine_id, {"status": "Unknown", "temperature_celsius": "-"})
 
 
 # TODO 1: เพิ่ม description และ parameter ให้ AI เข้าใจว่าฟังก์ชันนี้ใช้ทำอะไร
@@ -30,25 +30,25 @@ tools = [
     {
         "type": "function",
         "function": {
-            "name": "get_supplier_status",
-            "description": "Get the latest order status and ETA for a supplier by supplier_id",
+            "name": "get_machine_status",
+            "description": "Get the current status and temperature of a machine by machine_id",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "supplier_id": {
+                    "machine_id": {
                         "type": "string",
-                        "description": "Supplier ID, e.g. SUP-001",
+                        "description": "Machine ID, e.g. MAC-001",
                     }
                 },
-                "required": ["supplier_id"],
+                "required": ["machine_id"],
             },
         },
     }
 ]
 
 messages = [
-    {"role": "system", "content": "You are a helpful procurement assistant at BKC."},
-    {"role": "user", "content": "สถานะของ SUP-001 ตอนนี้เป็นอย่างไร และคาดว่าจะถึงเมื่อไหร่"},
+    {"role": "system", "content": "You are a helpful factory assistant at BKC."},
+    {"role": "user", "content": "สถานะของเครื่อง MAC-001 ตอนนี้เป็นอย่างไร อุณหภูมิเท่าไหร่"},
 ]
 
 response = client.chat.completions.create(
@@ -61,12 +61,12 @@ message = response.choices[0].message
 
 if message.tool_calls:
     for tool_call in message.tool_calls:
-        if tool_call.function.name == "get_supplier_status":
+        if tool_call.function.name == "get_machine_status":
             args = json.loads(tool_call.function.arguments)
-            print(f"[AI ขอเรียกฟังก์ชัน get_supplier_status กับ supplier_id={args['supplier_id']}]")
+            print(f"[AI ขอเรียกฟังก์ชัน get_machine_status กับ machine_id={args['machine_id']}]")
 
             # TODO 2: เรียกฟังก์ชันจริงด้วย argument ที่ AI ส่งมา
-            result = get_supplier_status(args["supplier_id"])
+            result = get_machine_status(args["machine_id"])
             print(f"[ผลลัพธ์จากฟังก์ชัน: {result}]")
 
             # TODO 3: ส่ง message ของ AI (ที่มี tool_calls) และผลลัพธ์ฟังก์ชันกลับเข้า messages

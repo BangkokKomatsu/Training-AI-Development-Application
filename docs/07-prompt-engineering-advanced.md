@@ -41,7 +41,7 @@ Output: {"category": "Document", "priority": "Low"}
 ```text
 Before deciding the priority, think step by step:
 1. Does this issue affect production line or shipment date?
-2. Is the supplier at fault or is information just missing?
+2. Is the operator at fault or is the machine just malfunctioning?
 3. Based on step 1-2, choose priority.
 
 Return JSON only with these fields:
@@ -81,7 +81,7 @@ summary, category, priority, confidence, missing_information, recommended_action
 
 ## 4. ลองทำ (Try it during class)
 
-ใช้ไฟล์ `workshops/lab-03-supplier-issue-analyzer/starter.py` หรือ `lab-04-it-ticket-classifier/starter.py` ที่ทำไปแล้ว แล้วลองทำ 3 อย่างนี้:
+ใช้ไฟล์ `workshops/lab-03-factory-issue-analyzer/starter.py` หรือ `lab-04-factory-issue-batch-excel/starter.py` ที่ทำไปแล้ว แล้วลองทำ 3 อย่างนี้:
 
 1. เพิ่ม **few-shot examples** 2-3 ตัวอย่างใน prompt แล้วดูว่า category/priority ตรงกับที่ต้องการมากขึ้นหรือไม่
 2. เพิ่ม field `confidence` (High/Medium/Low) ตามเทคนิคลด hallucination แล้ว print ออกมาดู

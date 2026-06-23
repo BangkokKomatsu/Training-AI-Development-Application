@@ -6,8 +6,8 @@
 
 หลังจบคอร์ส ผู้เรียนควรสามารถสร้าง Mini AI Agent Prototype แบบง่ายได้ เช่น
 
-- Supplier Issue Analyzer
-- IT Ticket Classifier
+- Factory Issue Analyzer
+- Factory Issue Batch Excel
 - Document Completeness Checker
 - Email Draft Generator
 

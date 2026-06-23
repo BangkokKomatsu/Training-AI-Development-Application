@@ -2,7 +2,7 @@
 
 ## Goal
 
-ให้ AI เรียกฟังก์ชัน Python (`get_supplier_status`) เพื่อดึงข้อมูล "สถานะ supplier" จาก mock database แล้วใช้ข้อมูลนั้นตอบคำถาม ตามแนวคิดใน `docs/09-function-calling.md`
+ให้ AI เรียกฟังก์ชัน Python (`get_machine_status`) เพื่อดึงข้อมูล "สถานะเครื่องจักร" จาก mock database แล้วใช้ข้อมูลนั้นตอบคำถาม ตามแนวคิดใน `docs/09-function-calling.md`
 
 ## What You Will Learn
 
@@ -13,23 +13,23 @@
 ## Mock Data
 
 ```python
-SUPPLIER_DB = {
-    "SUP-001": {"status": "Delayed", "eta": "2026-06-20"},
-    "SUP-002": {"status": "On Time", "eta": "2026-06-15"},
-    "SUP-003": {"status": "Pending Documents", "eta": "-"},
+MACHINE_DB = {
+    "MAC-001": {"status": "Overheating", "temperature_celsius": 85},
+    "MAC-002": {"status": "Running", "temperature_celsius": 45},
+    "MAC-003": {"status": "Stopped", "temperature_celsius": 25},
 }
 ```
 
 ## Flow
 
 ```text
-User: "สถานะของ SUP-001 ตอนนี้เป็นอย่างไร"
+User: "สถานะของเครื่อง MAC-001 ตอนนี้เป็นอย่างไร อุณหภูมิเท่าไหร่"
       |
       v
-AI ตัดสินใจเรียก get_supplier_status(supplier_id="SUP-001")
+AI ตัดสินใจเรียก get_machine_status(machine_id="MAC-001")
       |
       v
-Python รันฟังก์ชันจริง --> {"status": "Delayed", "eta": "2026-06-20"}
+Python รันฟังก์ชันจริง --> {"status": "Overheating", "temperature_celsius": 85}
       |
       v
 ส่งผลลัพธ์กลับไปให้ AI (role: "tool")
@@ -46,6 +46,6 @@ python workshops/lab-07-function-calling/starter.py
 
 ## Challenge
 
-1. ลองถาม supplier_id อื่น เช่น `SUP-002`, `SUP-003` และ id ที่ไม่มีในฐานข้อมูล เช่น `SUP-999`
-2. เพิ่มฟังก์ชันใหม่ `get_open_ticket_count(team: str)` พร้อม mock data แล้วเพิ่มเข้า `tools`
+1. ลองถาม machine_id อื่น เช่น `MAC-002`, `MAC-003` และ id ที่ไม่มีในฐานข้อมูล เช่น `MAC-999`
+2. เพิ่มฟังก์ชันใหม่ `get_maintenance_team(machine_type: str)` พร้อม mock data แล้วเพิ่มเข้า `tools`
 3. (Advanced) ลองถามคำถามที่ต้องใช้ทั้งสองฟังก์ชันในประโยคเดียว แล้วสังเกตว่า AI เลือกเรียกฟังก์ชันถูกต้องหรือไม่

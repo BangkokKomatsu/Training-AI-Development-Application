@@ -8,9 +8,9 @@
 |---|---|---|
 | 1 | `lab-01-first-api-call` | เรียก AI Model ผ่าน Microsoft Foundry ครั้งแรก |
 | 2 | `lab-02-prompt-to-json` | เขียน Prompt ให้ได้ JSON output |
-| 3 | `lab-03-supplier-issue-analyzer` | สร้าง Mini AI Agent วิเคราะห์ Supplier Issue |
-| 4 | `lab-04-it-ticket-classifier` | สร้าง Mini AI Agent แยกประเภท IT Ticket |
-| 5 | `lab-05-mini-challenge` | ออกแบบ Use Case และ Prompt ของตนเอง |
+| 3 | `lab-03-factory-issue-analyzer` | สร้าง Mini AI Agent วิเคราะห์ปัญหาโรงงาน พร้อมหน้าเว็บ Streamlit |
+| 4 | `lab-04-factory-issue-batch-excel` | ประมวลผลลูปและเขียนผลลัพธ์กลับลง Excel (Pandas) |
+| 5 | `lab-05-mini-challenge` | ออกแบบ Use Case และ Prompt ของตนเอง (พร้อม Streamlit UI) |
 
 ## Bonus Labs (ถ้าเหลือเวลา หรือกลับไปทำต่อที่บ้าน)
 

@@ -14,7 +14,7 @@ deployment_name = os.getenv("AZURE_OPENAI_DEPLOYMENT")
 
 SYSTEM_PROMPT = {
     "role": "system",
-    "content": "You are a helpful procurement assistant at BKC. Keep answers short.",
+    "content": "You are a helpful factory assistant at BKC. Keep answers short.",
 }
 
 # จำกัดจำนวนข้อความ (ไม่รวม system) ที่จะส่งกลับไปใน history เพื่อคุม token

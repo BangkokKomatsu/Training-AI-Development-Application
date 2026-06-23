@@ -8,9 +8,9 @@
 
 Lab 1-4 ทุก output มาจาก "ความรู้และข้อความที่ส่งให้ AI" เท่านั้น AI **เรียกข้อมูลจากระบบอื่นเองไม่ได้** เช่น
 
-- เช็คสถานะ PO ล่าสุดของ supplier จากระบบ ERP
-- เช็คว่า ticket นี้มีอยู่ในระบบแล้วหรือยัง
-- ดึงราคาสินค้าปัจจุบันจากฐานข้อมูล
+- เช็คสถานะเซ็นเซอร์ของเครื่องจักรล่าสุด
+- เช็คว่าใบแจ้งซ่อมนี้มีอยู่ในระบบแล้วหรือยัง
+- ดึงสต็อกอะไหล่ปัจจุบันจากฐานข้อมูล
 
 **Function Calling** คือกลไกที่ทำให้ AI สามารถ "ขอให้โปรแกรมของเรา" รันฟังก์ชัน Python แล้วส่งผลลัพธ์กลับไปให้ AI ใช้ตอบต่อ
 
@@ -36,17 +36,17 @@ tools = [
     {
         "type": "function",
         "function": {
-            "name": "get_supplier_status",
-            "description": "Get the latest order status for a supplier by supplier_id",
+            "name": "get_machine_status",
+            "description": "Get the current status and temperature of a machine by machine_id",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "supplier_id": {
+                    "machine_id": {
                         "type": "string",
-                        "description": "Supplier ID, e.g. SUP-001",
+                        "description": "Machine ID, e.g. MAC-001",
                     }
                 },
-                "required": ["supplier_id"],
+                "required": ["machine_id"],
             },
         },
     }
@@ -58,13 +58,13 @@ tools = [
 ## 4. ฟังก์ชันจริงฝั่ง Python (Mock data)
 
 ```python
-SUPPLIER_DB = {
-    "SUP-001": {"status": "Delayed", "eta": "2026-06-20"},
-    "SUP-002": {"status": "On Time", "eta": "2026-06-15"},
+MACHINE_DB = {
+    "MAC-001": {"status": "Overheating", "temperature_celsius": 85},
+    "MAC-002": {"status": "Normal", "temperature_celsius": 45},
 }
 
-def get_supplier_status(supplier_id: str) -> dict:
-    return SUPPLIER_DB.get(supplier_id, {"status": "Unknown", "eta": "-"})
+def get_machine_status(machine_id: str) -> dict:
+    return MACHINE_DB.get(machine_id, {"status": "Unknown", "temperature_celsius": "-"})
 ```
 
 ---
@@ -82,9 +82,9 @@ message = response.choices[0].message
 
 if message.tool_calls:
     for tool_call in message.tool_calls:
-        if tool_call.function.name == "get_supplier_status":
+        if tool_call.function.name == "get_machine_status":
             args = json.loads(tool_call.function.arguments)
-            result = get_supplier_status(args["supplier_id"])
+            result = get_machine_status(args["machine_id"])
 
             # ส่งผลลัพธ์ฟังก์ชันกลับไปให้ AI สรุปคำตอบสุดท้าย
             messages.append(message)
@@ -119,6 +119,6 @@ else:
 
 ไปที่ `workshops/lab-07-function-calling/`:
 
-1. รัน `starter.py` แล้วลองถาม "สถานะของ SUP-001 ตอนนี้เป็นอย่างไร"
-2. สังเกตว่า AI เรียก `get_supplier_status` ด้วย `supplier_id` ที่ถูกต้องหรือไม่
-3. (Challenge) ลองเพิ่มฟังก์ชันใหม่ เช่น `get_open_ticket_count(team: str)` พร้อม mock data แล้วเพิ่มใน `tools` ให้ AI เลือกใช้ได้ถูกต้อง
+1. รัน `starter.py` แล้วลองถาม "สถานะของเครื่อง MAC-001 ตอนนี้เป็นอย่างไร อุณหภูมิเท่าไหร่"
+2. สังเกตว่า AI เรียก `get_machine_status` ด้วย `machine_id` ที่ถูกต้องหรือไม่
+3. (Challenge) ลองเพิ่มฟังก์ชันใหม่ เช่น `get_maintenance_team(machine_type: str)` พร้อม mock data แล้วเพิ่มใน `tools` ให้ AI เลือกใช้ได้ถูกต้อง
