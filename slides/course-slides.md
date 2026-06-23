@@ -24,8 +24,8 @@ API Key • Endpoint • Token • Prompt • Python • Streamlit • Excel
 |---|---|---|
 | 10:00 - 10:20 | Introduction & Course Objective | Lecture |
 | 10:20 - 10:50 | Microsoft Foundry & API Concept | Lecture + Demo |
-| 10:50 - 11:15 | API Key Security & Token Basics | Lecture |
-| 11:15 - 12:00 | VS Code + Python Setup & Prompt Basics | Hands-on |
+| 10:50 - 11:15 | API Key Security & Token Cost Estimation | Lecture |
+| 11:15 - 12:00 | Setup, Prompt Basics & Model Parameters | Hands-on |
 | 12:00 - 13:00 | Lunch Break | - |
 | 13:00 - 14:00 | Lab 1-2: API Call + Prompt to JSON | Hands-on |
 | 14:00 - 14:45 | Lab 3: Factory Issue Analyzer & Web UI | Hands-on |
@@ -140,7 +140,18 @@ Input Tokens + Output Tokens = Total Usage
 ---
 
 # ส่วนที่ 4
-## VS Code + Python Setup & Prompt Basics
+## Setup, Prompt Basics & Model Parameters
+
+---
+
+## Model Parameters: ควบคุมสมอง AI
+
+ในการเขียนโปรแกรมเรียก AI เราสามารถตั้งค่า **Parameters** เพื่อควบคุมพฤติกรรมได้:
+
+- **Temperature (0.0 - 2.0):** ค่าความสร้างสรรค์
+  - `0.0`: ตรงไปตรงมา คาดเดาได้ (Deterministic) -> **เหมาะกับงานโรงงาน, สกัด JSON, จัดหมวดหมู่**
+  - `0.7`: สร้างสรรค์ ยืดหยุ่น -> **เหมาะกับงานคิดไอเดีย, ร่างอีเมล**
+- **Max Tokens:** จำกัดความยาวคำตอบ เพื่อควบคุมงบประมาณไม่ให้บานปลาย
 
 ---
 
@@ -171,8 +182,22 @@ Task:   ต้องทำอะไร
 Context: ข้อมูลประกอบคืออะไร
 Rules:  ข้อกำหนดหรือข้อห้าม
 Output Format: ต้องตอบกลับเป็นรูปแบบใด
-Input:  ข้อมูลจริงที่ให้วิเคราะห์
+Input:  ข้อมูลดิบที่ให้วิเคราะห์
 ```
+
+---
+
+## Few-Shot Prompting (เทคนิคการให้ตัวอย่าง)
+
+ในงานโรงงานที่มีคำศัพท์เฉพาะเจาะจง การอธิบายด้วยกฎอาจไม่พอ! การให้ตัวอย่าง (Examples) ควบคู่ไปด้วย จะทำให้ AI ทำงานได้ถูกต้องแม่นยำขึ้นมหาศาล
+
+**Zero-Shot (ไม่มีตัวอย่าง):** 
+*"จัดหมวดหมู่ปัญหานี้ให้หน่อย: ปั๊มลมมีน้ำมันรั่ว"*
+
+**Few-Shot (มีตัวอย่าง):** 
+*"ตัวอย่างที่ 1: ปั๊มลมมีน้ำมันรั่ว -> Category: Mechanical*
+*ตัวอย่างที่ 2: เซ็นเซอร์ไฟหน้าจอไม่ติด -> Category: Electrical*
+*ปัญหา: สายพานมอเตอร์ขาด -> Category: ???"*
 
 ---
 
@@ -206,17 +231,20 @@ python workshops/lab-02-prompt-to-json/starter.py
 
 ---
 
-## สร้างหน้าเว็บแอปง่ายๆ ด้วย Streamlit
+## Human-in-the-Loop (คนตรวจสอบเสมอ!)
 
-เราจะใช้ Python สร้างหน้าเว็บสำหรับกรอกปัญหาโรงงาน ให้ AI จัดหมวดหมู่ และแสดงสีแดง/เหลือง/เขียว แจ้งเตือนความปลอดภัย
+ในการทำงานจริงที่เกี่ยวข้องกับความปลอดภัยและสายการผลิต **เราไม่ควรให้ AI ตัดสินใจบันทึกข้อมูลหรือสั่งการเอง 100% โดยไม่มีคนตรวจ**
+
+**การออกแบบที่ดี:**
+1. ให้ AI วิเคราะห์และกรอกข้อมูลลงช่องให้ (Pre-fill)
+2. พนักงาน (Human) อ่านทบทวนและสามารถแก้ไขได้
+3. พนักงานกดยืนยัน (Submit) เพื่อบันทึกเข้าระบบ
 
 ```bash
 # รันหน้าเว็บ UI
 cd workshops/lab-03-factory-issue-analyzer
 streamlit run app_streamlit.py
 ```
-
-ลองพิมพ์โจทย์: *"มอเตอร์ปั๊มน้ำหล่อเย็นไลน์ผลิต 2 มีเสียงดังผิดปกติและมีควันขึ้น"*
 
 ---
 
@@ -225,16 +253,25 @@ streamlit run app_streamlit.py
 
 ---
 
-## ประมวลผลข้อมูลจำนวนมากด้วย Pandas
+## ประมวลผลจำนวนมากด้วย Pandas & Error Handling
 
-ในโรงงาน ข้อมูลมักอยู่ใน Excel เราสามารถใช้ Pandas อ่านข้อมูล ส่งให้ AI วิเคราะห์ทีละบรรทัด แล้วเขียนผลลัพธ์กลับลง Excel ใหม่
+เมื่อต้องประมวลผลข้อมูลใน Excel ทีละ 1,000 แถว **API อาจจะตอบกลับผิดพลาด หรืออินเทอร์เน็ตอาจจะหลุดชั่วคราว**
+
+เราต้องใช้ `try-except` ใน Python เพื่อไม่ให้โปรแกรมพังกลางคัน:
+```python
+try:
+    ai_result = analyze_issue(row['issue_report'])
+except Exception as e:
+    print(f"เกิดข้อผิดพลาด: {e}")
+    ai_result = {"category": "Error", "priority": "Error", "summary": "Error"}
+```
 
 ```bash
 cd workshops/lab-04-factory-issue-batch-excel
 python starter.py
 ```
 
-เช็คผลลัพธ์ไฟล์ Excel ที่ถูกสร้างขึ้น! AI ช่วยคัดแยก Category และ Priority ให้อัตโนมัติ
+เช็คผลลัพธ์ไฟล์ Excel ที่ถูกสร้างขึ้น! บรรทัดไหนพัง โปรแกรมจะข้ามไปทำบรรทัดต่อไปอย่างปลอดภัย
 
 ---
 

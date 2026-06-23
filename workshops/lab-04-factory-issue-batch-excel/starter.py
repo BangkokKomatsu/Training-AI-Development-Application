@@ -29,15 +29,24 @@ def analyze_issue(issue_report: str) -> dict:
     Issue report:
     {issue_report}
     """
-    response = client.chat.completions.create(
-        model=deployment_name,
-        messages=[
-            {"role": "system", "content": "You are a factory AI assistant. Return JSON only."},
-            {"role": "user", "content": prompt},
-        ],
-        response_format={ "type": "json_object" }
-    )
-    return json.loads(response.choices[0].message.content)
+    try:
+        response = client.chat.completions.create(
+            model=deployment_name,
+            temperature=0.0,
+            messages=[
+                {"role": "system", "content": "You are a factory AI assistant. Return JSON only."},
+                {"role": "user", "content": prompt},
+            ],
+            response_format={ "type": "json_object" }
+        )
+        return json.loads(response.choices[0].message.content)
+    except Exception as e:
+        print(f"  [Error] เกิดข้อผิดพลาดในการเรียก AI หรือแปลง JSON: {e}")
+        return {
+            "category": "Error: Needs Manual Review",
+            "priority": "Unknown",
+            "summary": "AI processing failed"
+        }
 
 # 1. โหลดข้อมูลจากไฟล์ JSON (สมมุติว่าเป็นข้อมูลที่ดึงมาจากระบบ ERP หรือตาราง)
 with open("../../sample-data/factory_issues.json", encoding="utf-8") as f:

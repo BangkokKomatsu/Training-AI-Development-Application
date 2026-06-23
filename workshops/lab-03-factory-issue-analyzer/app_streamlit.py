@@ -35,6 +35,7 @@ def analyze_factory_issue(issue_text):
     
     response = client.chat.completions.create(
         model=deployment_name,
+        temperature=0.0,
         messages=[
             {"role": "system", "content": "You are a factory AI assistant. Return JSON only."},
             {"role": "user", "content": prompt},
@@ -61,30 +62,35 @@ if st.button("🔍 วิเคราะห์ปัญหาด้วย AI", t
             try:
                 result = analyze_factory_issue(issue_input)
                 
-                st.subheader("📊 ผลการวิเคราะห์")
+                st.subheader("📊 ผลการวิเคราะห์ (Human-in-the-Loop)")
+                st.markdown("⚠️ **กรุณาตรวจสอบและแก้ไขผลลัพธ์จาก AI ก่อนกดยืนยันบันทึกลงระบบ**")
                 
-                # แสดงสีตามระดับความสำคัญ
-                priority = result.get("priority", "Low")
-                if priority == "High":
-                    st.error("🚨 ระดับความเร่งด่วน: สูงสุด (High) - แจ้งหัวหน้างานทันที!")
-                elif priority == "Medium":
-                    st.warning("⚠️ ระดับความเร่งด่วน: ปานกลาง (Medium) - เตรียมการเข้าแก้ไข")
-                else:
-                    st.success("✅ ระดับความเร่งด่วน: ปกติ (Low)")
-                    
-                # ใช้คอลัมน์เพื่อจัดหน้าให้สวยงาม
+                # -------------------------------------------------------------
+                # ส่วนแสดงผลแบบ Editable (เพื่อให้คนตรวจสอบก่อน)
+                # -------------------------------------------------------------
+                priority_list = ["Low", "Medium", "High"]
+                ai_priority = result.get("priority", "Low")
+                default_index = priority_list.index(ai_priority) if ai_priority in priority_list else 0
+                
+                edited_priority = st.selectbox("ระดับความเร่งด่วน:", priority_list, index=default_index)
+                
                 col1, col2 = st.columns(2)
                 with col1:
-                    st.info(f"**หมวดหมู่ปัญหา:** {result.get('category')}")
+                    edited_category = st.text_input("หมวดหมู่ปัญหา:", value=result.get('category'))
                 with col2:
-                    st.info(f"**เครื่องมือที่ต้องใช้:** {result.get('tools_needed')}")
+                    edited_tools = st.text_input("เครื่องมือที่ต้องใช้:", value=result.get('tools_needed'))
                     
-                st.write(f"**สรุปปัญหา:** {result.get('summary')}")
-                st.write(f"**คำแนะนำเบื้องต้น:** {result.get('recommended_action')}")
+                edited_summary = st.text_area("สรุปปัญหา:", value=result.get('summary'))
+                edited_action = st.text_area("คำแนะนำเบื้องต้น:", value=result.get('recommended_action'))
                 
-                # กล่องข้อความแจ้งเตือน (สามารถคัดลอกได้ง่าย)
-                st.text_area("ข้อความแจ้งเตือนความปลอดภัย (คัดลอกส่งไลน์ได้):", 
-                             result.get("safety_warning"), height=100)
+                edited_warning = st.text_area("ข้อความแจ้งเตือนความปลอดภัย (คัดลอกส่งไลน์ได้):", 
+                             value=result.get("safety_warning"), height=100)
+                             
+                st.divider()
+                # ปุ่มกดยืนยันหลังจากตรวจสอบแล้ว
+                if st.button("✅ ยืนยันข้อมูลและบันทึกลงระบบ (Submit)", type="primary", use_container_width=True):
+                    # ในการใช้งานจริง โค้ดตรงนี้จะนำตัวแปร edited_... ไปบันทึกลง Database หรือ Excel
+                    st.success(f"บันทึกข้อมูลเรียบร้อยแล้ว! (หมวดหมู่: {edited_category}, ความเร่งด่วน: {edited_priority})")
                              
             except Exception as e:
                 st.error(f"เกิดข้อผิดพลาดในการเชื่อมต่อ AI: {e}")
