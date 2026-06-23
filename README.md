@@ -30,6 +30,8 @@
 ├── .gitignore
 ├── agenda/
 │   └── agenda-10-16.md
+├── slides/
+│   └── course-slides.md
 ├── docs/
 │   ├── 00-overview.md
 │   ├── 01-foundry-concept.md
@@ -37,7 +39,10 @@
 │   ├── 03-token-basics.md
 │   ├── 04-prompt-engineering.md
 │   ├── 05-vscode-python-setup.md
-│   └── 06-security-checklist.md
+│   ├── 06-security-checklist.md
+│   ├── 07-prompt-engineering-advanced.md
+│   ├── 08-multi-turn-conversation.md
+│   └── 09-function-calling.md
 ├── sample-data/
 │   ├── supplier_issues.json
 │   └── it_tickets.json
@@ -47,7 +52,9 @@
     ├── lab-02-prompt-to-json/
     ├── lab-03-supplier-issue-analyzer/
     ├── lab-04-it-ticket-classifier/
-    └── lab-05-mini-challenge/
+    ├── lab-05-mini-challenge/
+    ├── lab-06-multi-turn-chatbot/      (Bonus)
+    └── lab-07-function-calling/        (Bonus)
 ```
 
 ---
@@ -69,6 +76,7 @@
 3. เตรียม `.env` ตัวอย่าง แต่ห้าม commit key จริง
 4. ทดสอบ Lab ทั้งหมดก่อนวันอบรม
 5. หลังอบรมควร rotate หรือ revoke key ที่ใช้ในห้องเรียน
+6. ใช้ `slides/course-slides.md` สำหรับนำเสนอ (เปิดด้วย VS Code extension "Marp for VS Code" หรือ export เป็น PDF/PPTX)
 
 ---
 
@@ -81,6 +89,8 @@
 | Lab 3 | Supplier Issue Analyzer | Mini AI Agent วิเคราะห์ปัญหา Supplier |
 | Lab 4 | IT Ticket Classifier | Mini AI Agent แยกประเภท IT Ticket |
 | Lab 5 | Mini Challenge | ผู้เรียนออกแบบ Use Case ของตัวเอง |
+| Lab 6 (Bonus) | Multi-turn Chatbot | Chatbot ที่จำบทสนทนาก่อนหน้าได้ |
+| Lab 7 (Bonus) | Function Calling | AI เรียกฟังก์ชัน Python เพื่อดึงข้อมูลจาก mock database |
 
 ---
 

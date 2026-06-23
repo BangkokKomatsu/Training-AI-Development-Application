@@ -12,6 +12,15 @@
 | 4 | `lab-04-it-ticket-classifier` | สร้าง Mini AI Agent แยกประเภท IT Ticket |
 | 5 | `lab-05-mini-challenge` | ออกแบบ Use Case และ Prompt ของตนเอง |
 
+## Bonus Labs (ถ้าเหลือเวลา หรือกลับไปทำต่อที่บ้าน)
+
+| Lab | Folder | Goal |
+|---|---|---|
+| 6 | `lab-06-multi-turn-chatbot` | สร้าง Chatbot ที่จำบทสนทนาก่อนหน้าได้ (Multi-turn & Memory) |
+| 7 | `lab-07-function-calling` | ให้ AI เรียกฟังก์ชัน Python เพื่อดึงข้อมูลจาก mock database (Function Calling) |
+
+> ดูเนื้อหาประกอบใน `docs/07-prompt-engineering-advanced.md`, `docs/08-multi-turn-conversation.md`, `docs/09-function-calling.md`
+
 ## Before Running Labs
 
 1. ติดตั้ง package

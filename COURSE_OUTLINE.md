@@ -5,7 +5,7 @@
 **ชื่อภาษาไทย:** พัฒนา AI Application เบื้องต้น: สร้าง Mini AI Agent ด้วย Microsoft Foundry, API Key, Token และ Prompt  
 **ระยะเวลา:** 1 วัน เวลา 10:00 - 16:00  
 **รูปแบบ:** Lecture + Demo + Hands-on Workshop  
-**เครื่องมือหลัก:** Microsoft Foundry, VS Code, Python
+**เครื่องมือหลัก:** Microsoft Foundry, VS Code, Python, Streamlit
 
 ---
 
@@ -13,16 +13,15 @@
 
 หลักสูตรนี้ออกแบบสำหรับผู้ที่ต้องการเริ่มต้นสร้าง AI Application หรือ Mini AI Agent Prototype โดยใช้ Microsoft Foundry ที่ BKC เตรียมไว้ให้ ผู้เรียนจะได้เรียนรู้แนวคิดของ API Key, Endpoint, Deployment, Token และ Prompt พร้อมลงมือเขียน Python บน VS Code เพื่อเรียกใช้งาน AI Model ผ่าน API
 
-ผู้เรียนจะได้ทดลองสร้าง Mini AI Agent แบบง่าย เช่น Supplier Issue Analyzer, IT Ticket Classifier และ Document Checker โดยเน้นความเข้าใจพื้นฐานและเห็นผลลัพธ์จริงภายในวันอบรม
+ผู้เรียนจะได้ทดลองสร้าง Mini AI Agent แบบง่าย เช่น การตรวจจับปัญหาเครื่องจักรขัดข้อง, การวิเคราะห์รอยตำหนิสินค้า, และการอ่านรายงานความปลอดภัย โดยเน้นความเข้าใจพื้นฐาน การสร้างหน้าเว็บแอปพลิเคชันอย่างง่ายด้วย Streamlit และเห็นผลลัพธ์จริงภายในวันอบรม
 
 ---
 
 ## 2. เหมาะกับใคร
 
-- Supplier หรือ Partner ที่มีพื้นฐาน IT เล็กน้อยถึงปานกลาง
-- พนักงานภายใน BKC เช่น IT, QA, Purchasing, Operation, Admin หรือ Supplier Coordinator
+- พนักงานภายใน BKC เช่น ฝ่ายผลิต, ซ่อมบำรุง, QA, ความปลอดภัย, คลังสินค้า, IT, หรือ Supplier Coordinator
 - ผู้ที่เคยใช้งาน ChatGPT / Copilot / Gemini ผ่านหน้าเว็บ และต้องการเข้าใจการใช้งานผ่าน API
-- ผู้ที่ต้องการเข้าใจการสร้าง Mini AI Agent Prototype ก่อนต่อยอดไป RAG Chatbot หรือ M365 AI Agent
+- ผู้ที่ต้องการเข้าใจการสร้าง Mini AI Agent Prototype และหน้าเว็บแอปพลิเคชันอย่างง่าย ก่อนต่อยอดไป RAG Chatbot หรือ M365 AI Agent
 
 ---
 
@@ -58,8 +57,9 @@
 - วิธีเก็บ API Key อย่างปลอดภัยด้วย `.env`
 - วิธีตั้งค่า VS Code + Python สำหรับเรียก AI API
 - วิธีเขียน Prompt แบบ Role, Task, Context, Rules, Output Format และ Input
-- วิธีให้ AI ตอบกลับเป็น JSON
-- วิธีสร้าง Mini AI Agent Prototype สำหรับ Use Case ง่าย ๆ
+- วิธีให้ AI ตอบกลับเป็น JSON อย่างแม่นยำ
+- วิธีสร้างหน้าเว็บแอปอย่างง่ายด้วย Streamlit เพื่อแสดงผลลัพธ์จาก AI (ทำกล่องข้อความ การ์ดสี สรุปผลลัพธ์)
+- วิธีอ่านข้อมูลและเขียนผลวิเคราะห์กลับลงไฟล์ Excel (Pandas + Openpyxl) สำหรับประมวลผลเป็นกลุ่ม (Batch)
 
 ---
 
@@ -69,9 +69,19 @@
 |---|---|---|---|
 | Lab 1 | First API Call | ตั้งค่า `.env` และเรียก AI Model ผ่าน Microsoft Foundry | ได้ Response แรกจาก AI API |
 | Lab 2 | Prompt to JSON | ปรับ Prompt ให้ AI ตอบเป็น JSON | เข้าใจ Structured Output |
-| Lab 3 | Supplier Issue Analyzer | วิเคราะห์ปัญหา Supplier จากข้อความตัวอย่าง | Mini AI Agent สำหรับ Supplier Issue |
-| Lab 4 | IT Ticket Classifier | แยกประเภท Ticket และแนะนำทีมรับผิดชอบ | Mini AI Agent สำหรับ IT Helpdesk |
-| Lab 5 | Mini Challenge | ออกแบบ Prompt และ Use Case ของตัวเอง | แนวคิด Prototype ที่นำไปต่อยอดได้ |
+| Lab 3 | Factory Issue Analyzer & Web UI | สร้างระบบวิเคราะห์ปัญหาในโรงงาน (ผลิต/ซ่อมบำรุง/QA/ความปลอดภัย) พร้อมเชื่อมหน้าเว็บ **Streamlit** | เว็บแอปพลิเคชัน AI วิเคราะห์ปัญหาโรงงานแบบเห็นภาพ |
+| Lab 4 | Factory Issue Batch & Excel | เขียนโค้ดวนลูปวิเคราะห์ปัญหาหลายเคสจากตารางข้อมูล และบันทึกผลกลับลงในไฟล์ **Excel** | โปรแกรม AI ช่วยจัดกลุ่มและจัดการรายงานใน Excel อัตโนมัติ |
+| Lab 5 | Mini Challenge | ออกแบบ Prompt และต่อยอด UI บนหน้าเว็บ Streamlit ของตัวเอง | โปรเจกต์ Prototype ที่สามารถนำกลับไปใช้งานจริงที่แผนกได้ |
+
+### Bonus Labs (เสริม ถ้ามีเวลาเหลือ)
+
+| Lab | ชื่อกิจกรรม | สิ่งที่ผู้เรียนจะได้ทำ | ผลลัพธ์ที่ได้ |
+|---|---|---|---|
+| Lab 6 | Multi-turn Chatbot | สร้าง Chatbot ที่เก็บ conversation history | เข้าใจ Memory และผลต่อ Token |
+| Lab 7 | Function Calling | ให้ AI เรียกฟังก์ชัน Python เพื่อดึงข้อมูลจาก mock database | พื้นฐานก่อนต่อยอดไป Agent ที่เชื่อมระบบจริง |
+
+> เนื้อหาเพิ่มเติม: `docs/07-prompt-engineering-advanced.md`, `docs/08-multi-turn-conversation.md`, `docs/09-function-calling.md`
+> สไลด์สำหรับนำเสนอทั้งคอร์ส (รวม Bonus): `slides/course-slides.md`
 
 ---
 
@@ -79,16 +89,17 @@
 
 | เวลา | หัวข้อ | รูปแบบ | รายละเอียด |
 |---|---|---|---|
-| 10:00 - 10:20 | Introduction & Course Objective | Lecture | แนะนำเป้าหมายหลักสูตร ภาพรวม Mini AI Agent และสิ่งที่จะได้ทำ |
+| 10:00 - 10:20 | Introduction & Course Objective | Lecture | แนะนำเป้าหมายหลักสูตร ภาพรวม Mini AI Agent และหน้าเว็บแอปที่จะได้สร้าง |
 | 10:20 - 10:50 | AI Application, Microsoft Foundry & API Concept | Lecture + Demo | อธิบาย Foundry, Endpoint, Deployment, API Key, Request และ Response |
 | 10:50 - 11:15 | API Key Security & Token Basics | Lecture | วิธีเก็บ Key, ความหมายของ Token และข้อควรระวัง |
 | 11:15 - 12:00 | VS Code + Python Setup & Prompt Basics | Hands-on | ตั้งค่า project, `.env`, package และเขียน Prompt พื้นฐาน |
 | 12:00 - 13:00 | Lunch Break | - | - |
-| 13:00 - 13:45 | Workshop 1: First API Call | Hands-on Lab | เรียก AI Model ผ่าน Microsoft Foundry ด้วย Python |
-| 13:45 - 14:30 | Workshop 2: Structured Output & JSON | Hands-on Lab | ให้ AI ตอบกลับเป็น JSON เพื่อนำไปใช้ต่อ |
-| 14:30 - 14:45 | Break | - | - |
-| 14:45 - 15:30 | Workshop 3: Mini AI Agent Prototype | Hands-on Lab | สร้าง Supplier Issue Analyzer หรือ IT Ticket Classifier |
-| 15:30 - 15:50 | Mini Challenge: Design Your Own Use Case | Activity | ผู้เรียนเลือก Use Case และทดสอบ Prompt ของตนเอง |
+| 13:00 - 13:30 | Workshop 1: First API Call | Hands-on Lab | เรียก AI Model ผ่าน Microsoft Foundry ด้วย Python |
+| 13:30 - 14:00 | Workshop 2: Structured Output & JSON | Hands-on Lab | ให้ AI ตอบกลับเป็น JSON เพื่อนำไปใช้ต่อในโค้ด |
+| 14:00 - 14:45 | Workshop 3: Factory Issue & Streamlit UI | Hands-on Lab | วิเคราะห์ปัญหาโรงงาน และสร้างหน้าเว็บอินเทอร์เฟซด้วย Streamlit |
+| 14:45 - 15:00 | Break | - | - |
+| 15:00 - 15:30 | Workshop 4: Excel Batch Processing | Hands-on Lab | วนลูปอ่านข้อมูล ประมวลผลด้วย AI และบันทึกผลการคัดแยกประเภทกลับลง Excel |
+| 15:30 - 15:50 | Mini Challenge: Design Your Own Use Case | Activity | ผู้เรียนออกแบบ Prompt และต่อยอด UI บนหน้าเว็บ Streamlit ของตนเอง |
 | 15:50 - 16:00 | Wrap-up, Security Checklist & Next Step | Summary | สรุปสิ่งที่เรียนและแนวทางต่อยอด |
 
 ---
@@ -100,8 +111,9 @@
 | API Key, Endpoint, Token และ Prompt | RAG Chatbot จากเอกสารจำนวนมาก |
 | การเรียก AI API ด้วย Python | Agent เต็มรูปแบบที่เชื่อมหลายระบบ |
 | การรับ Response เป็น Text / JSON | Production-grade deployment |
-| Mini AI Agent Prototype เฉพาะ Use Case | Governance ระดับองค์กรแบบเต็มรูปแบบ |
-| Security เบื้องต้นสำหรับ API Key | การเชื่อมต่อฐานข้อมูลจริง |
+| หน้าเว็บแอปพลิเคชันอย่างง่าย (Streamlit) | Governance ระดับองค์กรแบบเต็มรูปแบบ |
+| การเขียนผลลัพธ์เป็นตาราง Excel | การเชื่อมต่อฐานข้อมูลจริง |
+| Security เบื้องต้นสำหรับ API Key | |
 
 ---
 
@@ -110,5 +122,6 @@
 - BKC ควรเตรียม Microsoft Foundry project, model deployment, endpoint และ API key ก่อนวันอบรม
 - ควรกำหนด quota และ rate limit ให้เหมาะสมกับจำนวนผู้เรียน
 - ควรเตรียม `.env.example` และ sample data โดยไม่ใส่ key จริง
+- ควรติดตั้งแพ็คเกจเสริม (Streamlit, Pandas, Openpyxl) ในเครื่องผู้เรียนหรือมีอินเทอร์เน็ตที่พร้อมติดตั้ง
 - ควรทดสอบ workshop ทุก Lab ก่อนวันอบรม
 - หลังอบรมควร revoke หรือ rotate API Key ที่ใช้ร่วมกันในห้องเรียน
