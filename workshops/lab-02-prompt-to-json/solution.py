@@ -14,6 +14,8 @@ client = AzureOpenAI(
 deployment_name = os.getenv("AZURE_OPENAI_DEPLOYMENT")
 
 issue_report = "Supplier XYZ แจ้งว่าส่งของล่าช้า 3 วัน เพราะเครื่องจักรเสีย และยังไม่ยืนยันวันส่งใหม่"
+# 💡 ลองเปลี่ยนเป็นรับ input จาก user:
+# issue_report = input("กรุณากรอก Issue Report: ")
 
 prompt = f"""
 You are an AI assistant for supplier issue management at BKC.
@@ -28,7 +30,8 @@ Rules:
 
 Return JSON only with these fields:
 summary, category, priority, missing_information, recommended_action
-
+pls review the issue report and provide a concise summary, category, priority, any missing information, and recommended action.
+and translate the summary and recommended action into Thai language.
 Issue report:
 {issue_report}
 """
@@ -45,24 +48,33 @@ response = client.chat.completions.create(
 result = json.loads(response.choices[0].message.content)
 
 # Step 2: แสดง field แต่ละตัวแบบอ่านง่าย
-print("=== AI Analysis Result ===")
-print(f"Summary   : {result['summary']}")
-print(f"Category  : {result['category']}")
-print(f"Priority  : {result['priority']}")
-print(f"Missing   : {result.get('missing_information', '-')}")
-print(f"Action    : {result['recommended_action']}")
+print()
+print("=" * 50)
+print("       AI Analysis Result")
+print("=" * 50)
+print(f"  📋 Summary  : {result['summary']}")
+print(f"  🏷️  Category : {result['category']}")
+print(f"  🚨 Priority  : {result['priority']}")
+print(f"  ❓ Missing   : {result.get('missing_information', '-')}")
+print(f"  ✅ Action    : {result['recommended_action']}")
+print("=" * 50)
 
 # Step 3: ใช้ priority field ตัดสินใจทำสิ่งต่อไป
-print("\n=== Routing Decision ===")
+print()
+print("=" * 50)
+print("       Routing Decision")
+print("=" * 50)
 if result["priority"] == "High":
-    print("HIGH PRIORITY — แจ้ง Procurement Manager ทันที")
+    print("  🔴 HIGH PRIORITY — แจ้ง Procurement Manager ทันที")
 elif result["priority"] == "Medium":
-    print("MEDIUM — สร้าง Ticket ใน ERP ติดตามใน 24 ชั่วโมง")
+    print("  🟡 MEDIUM — สร้าง Ticket ใน ERP ติดตามใน 24 ชั่วโมง")
 else:
-    print("LOW — บันทึกไว้ติดตามตาม SLA ปกติ")
+    print("  🟢 LOW — บันทึกไว้ติดตามตาม SLA ปกติ")
+print("=" * 50)
 
 # Step 4: บันทึก JSON ลงไฟล์ (สมมุติว่าส่งต่อระบบอื่น เช่น ERP, dashboard)
 with open("lab02_output.json", "w", encoding="utf-8") as f:
     json.dump(result, f, ensure_ascii=False, indent=2)
 
-print("\nSaved to lab02_output.json — พร้อมส่งต่อระบบอื่น")
+print()
+print("💾 Saved to lab02_output.json — พร้อมส่งต่อระบบอื่น")

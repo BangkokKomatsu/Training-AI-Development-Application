@@ -12,12 +12,14 @@ client = AzureOpenAI(
 
 deployment_name = os.getenv("AZURE_OPENAI_DEPLOYMENT")
 
+user_input = input("คุณต้องการถามอะไร? > ")
+
 response = client.chat.completions.create(
     model=deployment_name,
     messages=[
         {"role": "system", "content": "You are a helpful AI assistant."},
-        {"role": "user", "content": "Explain what an API key is in simple Thai language."},
+        {"role": "user", "content": user_input},
     ],
 )
 
-print(response.choices[0].message.content)
+print("คำตอบของ AI:", response.choices[0].message.content)
