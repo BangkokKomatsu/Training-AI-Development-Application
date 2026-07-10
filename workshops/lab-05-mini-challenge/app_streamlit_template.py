@@ -19,16 +19,21 @@ def analyze_custom_usecase(user_input):
     
     # TODO: ให้นักเรียนเปลี่ยน Prompt ด้านล่างให้เข้ากับโจทย์ของตนเอง
     prompt = f"""
-    You are an AI assistant for ... [ใส่บทบาทของ AI ที่นี่] ...
+    You are an AI assistant for the Maintenance department.
+    Your job is to convert an informal maintenance request (written by a factory worker) into a structured work order.
     Analyze the following text.
-    
+
     Rules:
     - [ใส่กฎข้อที่ 1]
     - [ใส่กฎข้อที่ 2]
-    
+
     Return JSON only with these fields:
-    field1, field2, field3
-    
+    - work_order_title: สรุปหัวข้องานซ่อมแบบสั้น กระชับ
+    - equipment_or_location: เครื่องจักรหรือสถานที่ที่เกี่ยวข้อง
+    - priority: ระดับความเร่งด่วน (High, Medium, Low)
+    - problem_description: อธิบายปัญหาที่พบโดยละเอียด
+    - recommended_action: ข้อเสนอแนะขั้นตอนการซ่อม/แก้ไขเบื้องต้น
+
     Input text:
     {user_input}
     """
