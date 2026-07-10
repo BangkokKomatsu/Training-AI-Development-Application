@@ -23,16 +23,17 @@ API Key • Endpoint • Token • Prompt • Python • Streamlit • Excel
 | เวลา | หัวข้อ | รูปแบบ |
 |---|---|---|
 | 10:00 - 10:20 | Introduction & Course Objective | Lecture |
-| 10:20 - 10:50 | Microsoft Foundry & API Concept | Lecture + Demo |
+| 10:20 - 10:50 | ทำไม AI สำคัญ + Microsoft Foundry & API Concept | Lecture + Demo |
 | 10:50 - 11:15 | API Key Security & Token Cost Estimation | Lecture |
 | 11:15 - 12:00 | Setup, Prompt Basics & Model Parameters | Hands-on |
 | 12:00 - 13:00 | Lunch Break | - |
-| 13:00 - 14:00 | Lab 1-2: API Call + Prompt to JSON | Hands-on |
+| 13:00 - 13:25 | Lab 1: First API Call | Hands-on Lab |
+| 13:25 - 14:00 | Lab 2: Prompt to JSON | Hands-on Lab |
 | 14:00 - 14:45 | Lab 3: Factory Issue Analyzer & Web UI | Hands-on |
 | 14:45 - 15:00 | Break | - |
 | 15:00 - 15:30 | Lab 4: Factory Issue Batch Excel | Hands-on |
 | 15:30 - 15:50 | Lab 5: Mini Challenge | Activity |
-| 15:50 - 16:00 | Wrap-up & Next Step | Summary |
+| 15:50 - 16:00 | Wrap-up, Security Checklist & Next Step | Summary |
 
 ---
 
@@ -88,11 +89,46 @@ Response --> หน้าเว็บแอปพลิเคชันสวย�
 ---
 
 # ส่วนที่ 2
+## วิวัฒนาการ: จาก Manual สู่ GenAI API
+
+---
+
+## ทำไม AI ถึงสำคัญในยุคอุตสาหกรรม?
+
+- **ลดเวลาทำงานซ้ำซ้อน (Automate Repetitive Tasks):** ให้ AI ช่วยสรุปรายงานหรือคัดแยกปัญหา
+- **ลดความผิดพลาด (Reduce Human Error):** AI ตรวจสอบ Log ข้อมูลจำนวนมหาศาลโดยไม่เหนื่อยล้า
+- **เพิ่มขีดความสามารถ (Augment Human Capability):** เป็นผู้ช่วยคิดและวางแผน (Co-pilot) ไม่ใช่มาแทนที่คน
+- **ก้าวสู่ Smart Factory:** เชื่อมข้อมูลหน้างานเข้ากับสมองกลเพื่อการตัดสินใจแบบ Real-time
+
+---
+
+## Traditional AI vs Generative AI vs LLM
+
+- **Traditional AI:** เก่งเรื่องตัวเลข สถิติ และการทำนายแนวโน้ม (Predictive)
+- **Generative AI (GenAI):** มีความสามารถในการ "สร้างใหม่" (ข้อความ, รูปภาพ, โค้ด)
+- **Large Language Model (LLM):** โมเดลภาษาขนาดใหญ่ที่ถูกฝึกให้อ่าน/เขียนภาษาได้เหมือนมนุษย์ (เช่น ตระกูล GPT)
+- จุดเปลี่ยนสำคัญที่ทำให้ AI เข้าถึงคนทำงานทุกแผนก ไม่ใช่แค่สาย Tech
+
+---
+
+## จาก Chat สู่ Application (Chat → API)
+
+- **Web Chat (เช่น ChatGPT):** เหมาะกับ Personal Productivity (คนพิมพ์ถาม-ตอบเอง)
+- **API (Application Programming Interface):** ช่องทางให้ "ระบบคุยกับระบบ"
+- การสร้าง AI Application คือการใช้ API ฝังความฉลาดของ AI เข้าแอปพลิเคชันของเรา (Streamlit, Excel, ERP) โดยไม่ต้องมีคนมานั่งพิมพ์
+
+> 👉 **นี่คือสิ่งที่ Lab 1-5 ทั้งหมดในวันนี้กำลังจะทำ**
+
+---
+
+# ส่วนที่ 3
 ## Microsoft Foundry & API Concept
 
 ---
 
 ## คำศัพท์สำคัญ
+
+Foundry คือแพลตฟอร์มที่เราจะไปเรียก API ตามที่เพิ่งเห็นในสไลด์ก่อนหน้า
 
 | คำ | ความหมายแบบง่าย |
 |---|---|
@@ -105,7 +141,7 @@ Response --> หน้าเว็บแอปพลิเคชันสวย�
 
 ---
 
-# ส่วนที่ 3
+# ส่วนที่ 4
 ## API Key Security & Token Basics
 
 ---
@@ -139,7 +175,7 @@ Input Tokens + Output Tokens = Total Usage
 
 ---
 
-# ส่วนที่ 4
+# ส่วนที่ 5
 ## Setup, Prompt Basics & Model Parameters
 
 ---
@@ -203,8 +239,41 @@ Input:  ข้อมูลดิบที่ให้วิเคราะห์
 
 ---
 
-# ส่วนที่ 5
-## Lab 1-2: API Call และ Prompt to JSON
+# ส่วนที่ 6
+## Lab 1: First API Call
+
+---
+
+## เรียก AI ผ่านโค้ดครั้งแรก (Request → Response)
+
+ย้อนกลับไปดู diagram ในส่วนที่ 1: `App → Prompt → Foundry Endpoint + Key → AI Model → Response` — นี่คือโค้ดจริงของ diagram นั้น
+
+```python
+response = client.chat.completions.create(
+    model=deployment_name,
+    messages=[
+        {"role": "system", "content": "You are a helpful AI assistant."},
+        {"role": "user", "content": "Explain what an API key is in simple Thai language."},
+    ],
+)
+print(response.choices[0].message.content)
+```
+
+```bash
+python workshops/lab-01-first-api-call/starter.py
+```
+
+---
+
+## ลองเอง: Lab 1
+
+1. เปิด `starter.py` แก้ข้อความใน `content` (บรรทัด 19) เป็นคำถามอื่น แล้วรันใหม่
+2. เปิด `solution.py` ดูว่ายกระดับไปอีกขั้นด้วย `input()` ให้พิมพ์คำถามสดในหน้าจอได้เลย ไม่ต้องแก้โค้ดทุกครั้ง
+
+---
+
+# ส่วนที่ 7
+## Lab 2: Prompt to JSON
 
 ---
 
@@ -220,15 +289,20 @@ response = client.chat.completions.create(
 )
 ```
 
-**ลองรัน Lab 1 และ Lab 2:**
 ```bash
-python workshops/lab-01-first-api-call/starter.py
 python workshops/lab-02-prompt-to-json/starter.py
 ```
 
 ---
 
-# ส่วนที่ 6
+## ลองเอง: Lab 2
+
+1. แก้ `issue_report` (บรรทัด 16) เป็นปัญหาอื่น แล้วรันใหม่
+2. เปิดคอมเมนต์ Step 2-3 ใน `starter.py` (parse JSON ด้วย `json.loads` + ตัดสินใจตาม `priority`) แล้วรันดูผลลัพธ์ที่เปลี่ยนไป
+
+---
+
+# ส่วนที่ 8
 ## Lab 3: Factory Issue Analyzer & Web UI
 
 ---
@@ -250,7 +324,7 @@ streamlit run app_streamlit.py
 
 ---
 
-# ส่วนที่ 7
+# ส่วนที่ 9
 ## Lab 4: Factory Issue Batch Excel
 
 ---
@@ -277,7 +351,13 @@ python starter.py
 
 ---
 
-# ส่วนที่ 8
+## ลองเอง: Lab 4
+
+เพิ่มเคสปัญหาใหม่ใน `sample-data/factory_issues.json` แล้วรันซ้ำ ดูว่าไฟล์ Excel ที่ได้เปลี่ยนไปตามที่คาดไว้ไหม
+
+---
+
+# ส่วนที่ 10
 ## Lab 5: Mini Challenge
 
 ---
@@ -288,6 +368,21 @@ python starter.py
 1. คิดปัญหาที่พบเจอบ่อย (QA, Maintenance, Safety, Logistics)
 2. แก้ไขไฟล์ `starter.py` หรือหน้าเว็บ `app_streamlit.py`
 3. เขียน Prompt กำหนดกติกา และ Output (JSON) ใหม่
+
+---
+
+# ส่วนที่ 11
+## Security Checklist ก่อนใช้งานจริง
+
+---
+
+## สิ่งที่ต้องระวังก่อนนำไปใช้งานจริง
+
+- ❌ **ห้ามใช้ข้อมูล:** Customer data, Personal data, Contract, ราคา, ข้อมูลการเงิน, สูตร/ข้อมูลลับเครื่องจักร, เอกสารภายในที่ไม่ได้รับอนุญาต
+- ❌ **ห้าม hard-code API Key** ในไฟล์หรือ commit ขึ้น git — ใช้ `.env` + `.gitignore` เท่านั้น
+- ✅ **Human Review เสมอ** โดยเฉพาะ: สั่งควบคุมเครื่องจักร, ตัดสิน quality issue, สรุปเอกสารสำคัญ, business decision
+- ⚠️ **Prototype Limitation:** Mini AI Agent วันนี้เป็น prototype เพื่อการเรียนรู้ ยังไม่ใช่ production system
+- 🔁 หลังจบคอร์ส API Key ที่ใช้ร่วมกันในห้องเรียนจะถูก rotate/revoke
 
 ---
 

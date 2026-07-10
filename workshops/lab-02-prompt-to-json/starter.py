@@ -39,6 +39,7 @@ response = client.chat.completions.create(
         {"role": "system", "content": "You return concise and valid JSON only."},
         {"role": "user", "content": prompt},
     ],
+    response_format={"type": "json_object"},
 )
 
 # Step 1: Raw output จาก AI (ยังเป็น string)
