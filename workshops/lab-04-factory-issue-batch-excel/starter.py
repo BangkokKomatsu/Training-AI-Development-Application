@@ -32,7 +32,8 @@ def analyze_issue(issue_report: str) -> dict:
     try:
         response = client.chat.completions.create(
             model=deployment_name,
-            temperature=0.0,
+            # หมายเหตุ: gpt-5-mini ไม่รองรับ temperature/max_tokens
+            # ถ้าใช้ gpt-4o สามารถเพิ่ม temperature=0.0 เพื่อผลลัพธ์ที่คงที่ได้
             messages=[
                 {"role": "system", "content": "You are a factory AI assistant. Return JSON only."},
                 {"role": "user", "content": prompt},

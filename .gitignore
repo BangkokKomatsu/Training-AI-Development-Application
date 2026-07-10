@@ -10,3 +10,4 @@ venv/
 *.doc
 .__pycache__/
 *.pyo
+*.json

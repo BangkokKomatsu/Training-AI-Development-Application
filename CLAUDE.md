@@ -9,10 +9,14 @@ Training material for **"AI Application Development: Build Your First Mini AI Ag
 Current structure:
 - `docs/00-09` — lecture content (Foundry concept, API key/token, prompt engineering, setup, security, + bonus: advanced prompting, multi-turn, function calling)
 - `workshops/lab-01` to `lab-07` — hands-on labs with `starter.py` / `solution.py` (Lab 6-7 are bonus/advanced: multi-turn chatbot, function calling)
-- `slides/course-slides.md` — Marp slide deck for the full-day technical course (Track B below)
+- `workshops/colab/bkc_ai_workshop.ipynb` — **Track A** single Colab notebook (Setup + Lab 1-4 + Mini Challenge), pre-filled cells with one `# ✏️` edit point each
+- `slides/course-slides.md` — Marp deck for the technical **Track B** (VS Code + local Python)
+- `slides/course-slides-colab.md` — Marp deck for **Track A** (Colab-led, non-IT-friendly)
 - `sample-data/` — factory issues (non-confidential mock data)
 
-This existing course (Lab 1-7 + slides) is the **technical / "Track B"** path: VS Code + Python + Azure OpenAI SDK, aimed at people comfortable writing/running code.
+The Lab 1-7 `.py` files + `course-slides.md` are the **technical / "Track B"** path: VS Code + Python + Azure OpenAI SDK, aimed at people comfortable writing/running code.
+
+**Model note (verified 2026-07):** BKC's deployment is **`gpt-5-mini`**, which on Azure OpenAI **rejects `temperature` and `max_tokens`** (use `max_completion_tokens` or omit; omit `temperature`). The Track A materials already account for this — precision is taught via prompt + JSON mode, not Temperature. The Track B `.py` labs and `course-slides.md` may still reference `temperature`/`max_tokens` and need the same fix if run on gpt-5-mini.
 
 ---
 
@@ -22,23 +26,25 @@ This existing course (Lab 1-7 + slides) is the **technical / "Track B"** path: V
 
 Most people interested in this training are **not IT** — they work in Purchasing, QA, HR, Finance, Admin, etc. The existing Track B (raw Python + API calls) is too technical as an entry point for them. They only get a Foundry API key during the training session itself (no ongoing ChatGPT/Copilot access afterward, as of now).
 
-### Decided direction (from discussion)
+### Decided direction — BUILT (confirmed 2026-07-10)
 
-- **Not** a fully no-code Streamlit-only experience — the user wants participants to write *some* code, but it should be mostly **copy-paste**.
-- Approach: **"Fill-in-the-blank with ready-made prompts"**
-  - One pre-built, complete script `mini_agent.py` (boilerplate: API client, JSON parsing, pretty print — fully working, nothing to debug)
-  - Participants edit only two variables by copy-pasting:
-    - `PROMPT_TEMPLATE` — picked from a printed/slide "Prompt Gallery" (5 ready-made templates: Factory Issue Analyzer, Document Completeness Checker, Email Draft Generator, Meeting Notes → Action Plan)
-    - `INPUT_TEXT` — their own (non-confidential) real-work text
-  - Run `python mini_agent.py` → see formatted result immediately
-- This mirrors/simplifies the existing Lab 5 "Mini Challenge" but removes the open-ended prompt-design burden — prompts are provided ready-made.
+Concrete audience for the next run: **~50 people, ~5 IT / ~45 non-IT**, 10:00–16:00.
 
-### Not yet built (still brainstorming / not prioritized)
+Delivery decisions (locked):
+- **Google Colab is the primary runtime** (browser, zero local install) — kills ~80% of setup failures for non-IT. Local `.py`/Streamlit kept as an option for the ~5 IT people = **dual-track**.
+- **Fill-in-the-blank:** cells pre-filled, learners just press Run and edit ONE marked spot per lab (`# ✏️`, usually the prompt or input). They do NOT write code from scratch.
+- **Teaching flow (user's preference):** explain concept on slides → walk through Colab code → run together, in short cycles per topic. NOT git-following, NOT live-coding from scratch.
+- **Lab 3 (Streamlit) and Lab 4 (Excel/try-except) are demo-led** for non-IT; protect deep hands-on for Lab 1, 2, and the Mini Challenge (where the transferable prompt skill lands).
+- Ops: **3 TAs** roam + hand-raise; ~5 IT participants seeded as table buddies. **One shared API key** for all 50 → don't run all at once (avoid 429), request higher TPM, Thai try-except messages, rotate key after.
 
-Deliverables identified but **not started**:
-1. `mini_agent.py` — the boilerplate script described above
-2. "Prompt Gallery" handout — the 5 ready-made prompt templates, copy-paste formatted
-3. New slide deck / agenda for Track A (lighter than Track B — skip deep API Key/Endpoint mechanics)
+Built deliverables:
+1. `workshops/colab/bkc_ai_workshop.ipynb` — the fill-in-the-blank Colab notebook (replaces the earlier `mini_agent.py` idea)
+2. `slides/course-slides-colab.md` — Track A Marp deck (includes Prompt Cheat Sheet + "Round 2 > Round 1" prompt-refinement slide)
+
+### Still open / not built
+- "Prompt Gallery" as a separate printed handout of 5 ready-made templates (the notebook has inline templates instead — build the handout only if the user wants a paper takeaway)
+- Facilitator run-sheet (minute-by-minute instructor script) — offered, not yet built
+- Department-specific sample data beyond the factory examples
 
 ### Additional activity ideas discussed (pick & choose, not all needed)
 
@@ -64,7 +70,8 @@ Deliverables identified but **not started**:
 
 ### Next step when resuming this work
 
-Ask the user to prioritize which of the above activities to include, then build in this order:
-1. `mini_agent.py` + Prompt Gallery (core hands-on)
-2. Track A agenda/slide deck
-3. Selected bonus activities (cheat sheet, toolbox map, etc.)
+Core Track A hands-on + slides are DONE (see "Built deliverables" above). Remaining options, if the user wants them:
+1. Facilitator run-sheet (minute-by-minute instructor script) — the natural next step
+2. "Prompt Gallery" paper handout + "AI Toolbox Map" / "Action Card" take-home pieces
+3. Selected bonus activities (icebreaker "Be the AI", "Spot the Hallucination", department-specific sample data)
+4. Verify the Colab notebook end-to-end against BKC's real gpt-5-mini deployment before the session
