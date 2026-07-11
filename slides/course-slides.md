@@ -73,7 +73,7 @@ Microsoft Foundry Endpoint + API Key
 AI Model
     |
     v
-Response --> หน้าเว็บแอปพลิเคชันสวยงาม / ตาราง Excel สรุปผล
+Response --> หน้าเว็บแอปพลิเคชันสวยงาม
 ```
 
 
