@@ -254,6 +254,15 @@ python workshops/lab-01-first-api-call/starter.py
 
 ---
 
+## จุดสำคัญ: `messages` คือบทสนทนาทั้งหมดที่ส่งให้ AI
+
+- `role: "system"` — กำหนด "บุคลิก/หน้าที่" ของ AI ผู้ใช้ไม่เห็นข้อความนี้ แต่มีผลกับทุกคำตอบ
+- `role: "user"` — คำถาม/คำสั่งจริงจากคนใช้งาน
+- ทุกครั้งที่รันคือบทสนทนา**ใหม่** — AI ไม่มี memory ข้าม request (จะเห็นวิธีทำให้ AI "จำ" ได้ใน Lab 6 ช่วงเสริม ถ้ามีเวลา)
+- โครงสร้าง response จริง: `choices` เป็น list (ปกติมี 1 คำตอบ), `.message.content` คือข้อความคำตอบ
+
+---
+
 ## ลองเอง: Lab 1
 
 1. เปิด `starter.py` แก้ข้อความใน `content` (บรรทัด 19) เป็นคำถามอื่น แล้วรันใหม่
@@ -281,6 +290,21 @@ response = client.chat.completions.create(
 ```bash
 python workshops/lab-02-prompt-to-json/starter.py
 ```
+
+---
+
+## จุดสำคัญ: `response_format` มีเงื่อนไขที่มักลืม
+
+- บังคับให้ AI ตอบเป็น JSON string ล้วน ๆ **แต่มีเงื่อนไข: prompt ต้องมีคำว่า "JSON" อยู่ด้วย** ไม่งั้น Azure OpenAI จะ error
+- ผลลัพธ์ที่ได้ยังเป็น **string** อยู่ดี ต้องแปลงเป็น Python dict ก่อนใช้งานต่อ:
+
+```python
+import json
+result = json.loads(response.choices[0].message.content)
+print(result["priority"])          # เข้าถึงแต่ละ field ได้ตรง ๆ
+```
+
+- ทำไมสำคัญ: Lab 3, 4, 5 ใช้ pattern นี้ซ้ำทุกครั้งที่ต้องเอาผลลัพธ์ AI ไปแสดงบนหน้าเว็บหรือใส่ตาราง Excel
 
 ---
 
@@ -313,6 +337,30 @@ streamlit run app_streamlit.py
 
 ---
 
+## จุดสำคัญ (Technical): ทำไมต้องใช้ `st.session_state`
+
+Streamlit มีพฤติกรรมเฉพาะตัวที่มักทำให้พลาด: **ทุกครั้งที่ผู้ใช้โต้ตอบกับหน้าเว็บ (เปลี่ยนค่าใน dropdown, พิมพ์ข้อความ) Streamlit จะรันสคริปต์ทั้งไฟล์ใหม่ตั้งแต่บรรทัดแรก**
+
+```python
+if st.button("🔍 วิเคราะห์ปัญหาด้วย AI"):
+    result = analyze_factory_issue(issue_input)
+    edited_priority = st.selectbox(...)   # ❌ ถ้าผู้ใช้เปลี่ยนค่าตรงนี้ก่อนกด submit
+                                           #    ทั้งบล็อกนี้จะหายไป เพราะปุ่มคืนค่า True แค่รอบที่กดเท่านั้น
+```
+
+**วิธีแก้:** เก็บผลลัพธ์ไว้ใน `st.session_state` (หน่วยความจำที่ "รอด" ข้ามการรันซ้ำ) แล้วย้าย UI มาแสดงนอกเงื่อนไขปุ่ม:
+
+```python
+if st.button("🔍 วิเคราะห์ปัญหาด้วย AI"):
+    st.session_state["analysis_result"] = analyze_factory_issue(issue_input)
+
+if "analysis_result" in st.session_state:
+    result = st.session_state["analysis_result"]
+    edited_priority = st.selectbox(...)   # ✅ ไม่หายแล้ว แม้ผู้ใช้จะแก้ไขค่าก่อนกด submit
+```
+
+---
+
 # ส่วนที่ 9
 ## Lab 4: Factory Issue Batch Excel
 
@@ -330,6 +378,8 @@ except Exception as e:
     print(f"เกิดข้อผิดพลาด: {e}")
     ai_result = {"category": "Error", "priority": "Error", "summary": "Error"}
 ```
+
+นอกจาก `try-except` แล้ว ควรใส่ `time.sleep(1)` หลังแต่ละ request ด้วย — ถ้าวนลูปยิง API รัว ๆ ทีละหลายร้อยแถว (หรือทั้งห้องรันพร้อมกันด้วย key เดียวกัน) จะชน **Rate Limit (429 Too Many Requests)** ตามที่พูดถึงในหัวข้อ Token (ส่วนที่ 4)
 
 ```bash
 cd workshops/lab-04-factory-issue-batch-excel
@@ -355,8 +405,18 @@ python starter.py
 
 ทดลองนำความรู้ที่เรียนทั้งหมดมาประยุกต์ใช้กับงานในแผนกของคุณ
 1. คิดปัญหาที่พบเจอบ่อย (QA, Maintenance, Safety, Logistics)
-2. แก้ไขไฟล์ `starter.py` หรือหน้าเว็บ `app_streamlit.py`
-3. เขียน Prompt กำหนดกติกา และ Output (JSON) ใหม่
+2. แก้ไขไฟล์ `app_streamlit_template.py` (มีจุดแก้ `# ✏️` ให้แล้ว) หรือดูตัวอย่างเต็มใน `starter.py` / `solution.py` (use case: Document Completeness Checker — เช็คว่าเอกสารจาก Supplier ครบถ้วนหรือไม่)
+3. เขียน Prompt ใหม่ตามสูตร **Role → Task → Rules → Output Format** ที่เรียนมา (ส่วนที่ 5)
+
+---
+
+# ส่วนเสริม (ถ้ามีเวลา)
+## Lab 6-7: Multi-turn Chatbot & Function Calling
+
+- **Lab 6 (`docs/08-multi-turn-conversation.md`):** ทำให้ AI "จำ" บทสนทนาได้ ด้วยการเก็บ `messages` สะสมทุกรอบแล้วส่งกลับไปทั้งก้อน
+- **Lab 7 (`docs/09-function-calling.md`):** ทำให้ AI "เรียกใช้ฟังก์ชัน Python" ของเราเองได้ (เช่น เช็คสถานะเครื่องจักรจาก database จริง) — พื้นฐานก่อนต่อยอดเป็น Agent เต็มรูปแบบ
+
+ใครทำ Lab 1-5 เสร็จก่อนเวลา ลองต่อ 2 lab นี้ได้เลย
 
 ---
 
