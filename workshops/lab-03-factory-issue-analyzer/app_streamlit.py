@@ -61,37 +61,43 @@ if st.button("🔍 วิเคราะห์ปัญหาด้วย AI", t
     else:
         with st.spinner("AI กำลังวิเคราะห์..."):
             try:
-                result = analyze_factory_issue(issue_input)
-                
-                st.subheader("📊 ผลการวิเคราะห์ (Human-in-the-Loop)")
-                st.markdown("⚠️ **กรุณาตรวจสอบและแก้ไขผลลัพธ์จาก AI ก่อนกดยืนยันบันทึกลงระบบ**")
-                
-                # -------------------------------------------------------------
-                # ส่วนแสดงผลแบบ Editable (เพื่อให้คนตรวจสอบก่อน)
-                # -------------------------------------------------------------
-                priority_list = ["Low", "Medium", "High"]
-                ai_priority = result.get("priority", "Low")
-                default_index = priority_list.index(ai_priority) if ai_priority in priority_list else 0
-                
-                edited_priority = st.selectbox("ระดับความเร่งด่วน:", priority_list, index=default_index)
-                
-                col1, col2 = st.columns(2)
-                with col1:
-                    edited_category = st.text_input("หมวดหมู่ปัญหา:", value=result.get('category'))
-                with col2:
-                    edited_tools = st.text_input("เครื่องมือที่ต้องใช้:", value=result.get('tools_needed'))
-                    
-                edited_summary = st.text_area("สรุปปัญหา:", value=result.get('summary'))
-                edited_action = st.text_area("คำแนะนำเบื้องต้น:", value=result.get('recommended_action'))
-                
-                edited_warning = st.text_area("ข้อความแจ้งเตือนความปลอดภัย (คัดลอกส่งไลน์ได้):", 
-                             value=result.get("safety_warning"), height=100)
-                             
-                st.divider()
-                # ปุ่มกดยืนยันหลังจากตรวจสอบแล้ว
-                if st.button("✅ ยืนยันข้อมูลและบันทึกลงระบบ (Submit)", type="primary", use_container_width=True):
-                    # ในการใช้งานจริง โค้ดตรงนี้จะนำตัวแปร edited_... ไปบันทึกลง Database หรือ Excel
-                    st.success(f"บันทึกข้อมูลเรียบร้อยแล้ว! (หมวดหมู่: {edited_category}, ความเร่งด่วน: {edited_priority})")
-                             
+                st.session_state["analysis_result"] = analyze_factory_issue(issue_input)
             except Exception as e:
                 st.error(f"เกิดข้อผิดพลาดในการเชื่อมต่อ AI: {e}")
+
+# แสดงผลนอกเงื่อนไขปุ่ม "วิเคราะห์" โดยอ่านค่าจาก st.session_state แทนตัวแปรธรรมดา
+# เหตุผล: Streamlit รันสคริปต์ใหม่ทั้งไฟล์ทุกครั้งที่มีการโต้ตอบ (เช่น เปลี่ยนค่าใน selectbox ด้านล่าง)
+# และ st.button() จะคืนค่า True แค่รอบที่กดเท่านั้น ถ้าเก็บผลลัพธ์ไว้ในตัวแปรธรรมดาในเงื่อนไข if ข้างบน
+# ฟอร์มแก้ไขทั้งหมดจะหายไปทันทีที่ผู้ใช้แก้ไขค่าใด ๆ ก่อนกดยืนยัน
+if "analysis_result" in st.session_state:
+    result = st.session_state["analysis_result"]
+
+    st.subheader("📊 ผลการวิเคราะห์ (Human-in-the-Loop)")
+    st.markdown("⚠️ **กรุณาตรวจสอบและแก้ไขผลลัพธ์จาก AI ก่อนกดยืนยันบันทึกลงระบบ**")
+
+    # -------------------------------------------------------------
+    # ส่วนแสดงผลแบบ Editable (เพื่อให้คนตรวจสอบก่อน)
+    # -------------------------------------------------------------
+    priority_list = ["Low", "Medium", "High"]
+    ai_priority = result.get("priority", "Low")
+    default_index = priority_list.index(ai_priority) if ai_priority in priority_list else 0
+
+    edited_priority = st.selectbox("ระดับความเร่งด่วน:", priority_list, index=default_index)
+
+    col1, col2 = st.columns(2)
+    with col1:
+        edited_category = st.text_input("หมวดหมู่ปัญหา:", value=result.get('category'))
+    with col2:
+        edited_tools = st.text_input("เครื่องมือที่ต้องใช้:", value=result.get('tools_needed'))
+
+    edited_summary = st.text_area("สรุปปัญหา:", value=result.get('summary'))
+    edited_action = st.text_area("คำแนะนำเบื้องต้น:", value=result.get('recommended_action'))
+
+    edited_warning = st.text_area("ข้อความแจ้งเตือนความปลอดภัย (คัดลอกส่งไลน์ได้):",
+                 value=result.get("safety_warning"), height=100)
+
+    st.divider()
+    # ปุ่มกดยืนยันหลังจากตรวจสอบแล้ว
+    if st.button("✅ ยืนยันข้อมูลและบันทึกลงระบบ (Submit)", type="primary", use_container_width=True):
+        # ในการใช้งานจริง โค้ดตรงนี้จะนำตัวแปร edited_... ไปบันทึกลง Database หรือ Excel
+        st.success(f"บันทึกข้อมูลเรียบร้อยแล้ว! (หมวดหมู่: {edited_category}, ความเร่งด่วน: {edited_priority})")

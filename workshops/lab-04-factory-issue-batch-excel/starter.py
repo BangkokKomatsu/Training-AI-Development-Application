@@ -1,5 +1,6 @@
 import json
 import os
+import time
 import pandas as pd
 from dotenv import load_dotenv
 from openai import AzureOpenAI
@@ -68,6 +69,7 @@ for index, row in df.iterrows():
         "Priority": ai_result.get("priority"),
         "Summary": ai_result.get("summary")
     })
+    time.sleep(1)  # กันชน Rate Limit (RPM/TPM) เวลาหลายคนรันพร้อมกัน — ดู docs/03-token-basics.md
 
 # 3. นำผลลัพธ์มาต่อเข้ากับ DataFrame เดิม
 result_df = pd.DataFrame(results)

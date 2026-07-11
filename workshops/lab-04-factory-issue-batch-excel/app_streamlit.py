@@ -1,5 +1,6 @@
 import json
 import os
+import time
 import pandas as pd
 import streamlit as st
 from dotenv import load_dotenv
@@ -82,7 +83,9 @@ if uploaded_file is not None:
                 })
             except Exception as e:
                 results.append({"AI_Category": "Error", "AI_Priority": "Error", "AI_Summary": str(e)})
-            
+
+            time.sleep(1)  # กันชน Rate Limit เวลาหลายคนรันพร้อมกัน
+
             # อัปเดต Progress Bar
             progress_bar.progress((index + 1) / total_rows)
             
