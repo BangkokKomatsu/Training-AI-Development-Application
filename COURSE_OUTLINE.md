@@ -76,16 +76,6 @@
 | Lab 4 | Factory Issue Batch & Excel | เขียนโค้ดวนลูปวิเคราะห์ปัญหาหลายเคสจากตารางข้อมูล และบันทึกผลกลับลงในไฟล์ **Excel** | โปรแกรม AI ช่วยจัดกลุ่มและจัดการรายงานใน Excel อัตโนมัติ |
 | Lab 5 | Mini Challenge | ออกแบบ Prompt และต่อยอด UI บนหน้าเว็บ Streamlit ของตัวเอง | โปรเจกต์ Prototype ที่สามารถนำกลับไปใช้งานจริงที่แผนกได้ |
 
-### Bonus Labs (เสริม ถ้ามีเวลาเหลือ)
-
-| Lab | ชื่อกิจกรรม | สิ่งที่ผู้เรียนจะได้ทำ | ผลลัพธ์ที่ได้ |
-|---|---|---|---|
-| Lab 6 | Multi-turn Chatbot | สร้าง Chatbot ที่เก็บ conversation history | เข้าใจ Memory และผลต่อ Token |
-| Lab 7 | Function Calling | ให้ AI เรียกฟังก์ชัน Python เพื่อดึงข้อมูลจาก mock database | พื้นฐานก่อนต่อยอดไป Agent ที่เชื่อมระบบจริง |
-
-> เนื้อหาเพิ่มเติม: `docs/07-prompt-engineering-advanced.md`, `docs/08-multi-turn-conversation.md`, `docs/09-function-calling.md`
-> สไลด์สำหรับนำเสนอทั้งคอร์ส (รวม Bonus): `slides/course-slides.md`
-
 ---
 
 ## 7. Agenda เบื้องต้น เวลา 10:00 - 16:00
@@ -120,7 +110,7 @@
 
 ---
 
-## 9. หมายเหตุสำหรับผู้จัดอบรม
+<!-- ## 9. หมายเหตุสำหรับผู้จัดอบรม
 
 - BKC ควรเตรียม Microsoft Foundry project, model deployment, endpoint และ API key ก่อนวันอบรม
 - ควรกำหนด quota และ rate limit ให้เหมาะสมกับจำนวนผู้เรียน
@@ -223,4 +213,4 @@
 **Slide 15: Next Steps (ก้าวต่อไป)**
 - **RAG (Retrieval-Augmented Generation):** ทำให้ AI ค้นหาและตอบคำถามจากคู่มือบริษัท PDF หรือฐานข้อมูลขององค์กร
 - **M365 Copilot / Power Platform:** การสร้าง Agent แบบ Low-code/No-code 
-- **Let's Build:** พร้อมแล้วไปเปิด VS Code และเริ่มทำ Lab 1 กันเลย!
+- **Let's Build:** พร้อมแล้วไปเปิด VS Code และเริ่มทำ Lab 1 กันเลย! -->
