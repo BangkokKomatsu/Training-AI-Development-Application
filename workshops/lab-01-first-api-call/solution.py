@@ -12,6 +12,7 @@ client = AzureOpenAI(
 
 deployment_name = os.getenv("AZURE_OPENAI_DEPLOYMENT")
 
+# ต่างจาก starter.py ตรงนี้: user_input มาจากคนพิมพ์เอง ไม่ใช่ข้อความตายตัว
 user_input = input("คุณต้องการถามอะไร? > ")
 
 response = client.chat.completions.create(
@@ -20,6 +21,7 @@ response = client.chat.completions.create(
         {"role": "system", "content": "You are a helpful AI assistant."},
         {"role": "user", "content": user_input},
     ],
+    # หมายเหตุ: deployment gpt-5-mini ของ BKC ไม่รองรับ temperature / max_tokens
 )
 
 print("คำตอบของ AI:", response.choices[0].message.content)

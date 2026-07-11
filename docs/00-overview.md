@@ -6,10 +6,10 @@
 
 หลังจบคอร์ส ผู้เรียนควรสามารถสร้าง Mini AI Agent Prototype แบบง่ายได้ เช่น
 
-- Factory Issue Analyzer
-- Factory Issue Batch Excel
-- Document Completeness Checker
-- Email Draft Generator
+- Factory Issue Analyzer (Lab 3) — วิเคราะห์และจัดหมวดหมู่ปัญหาจาก Supplier/หน้างานอัตโนมัติ
+- Factory Issue Batch Excel (Lab 4) — อ่าน Excel ทีละหลายแถวแล้วให้ AI สรุปผลลง Excel กลับ
+- Mini Challenge (Lab 5) — ต่อยอด use case ของตัวเองจากโครงสร้างที่เรียนมา
+- Multi-turn Chatbot และ Function Calling (Lab 6-7, บทเรียนเสริม) — สำหรับผู้ที่อยากต่อยอดเป็น Agent ที่โต้ตอบหลายรอบหรือเรียกใช้ฟังก์ชันเอง
 
 ---
 

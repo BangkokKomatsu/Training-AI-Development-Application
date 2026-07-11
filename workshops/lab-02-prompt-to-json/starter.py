@@ -33,6 +33,9 @@ Issue report:
 {issue_report}
 """
 
+# response_format={"type": "json_object"} บังคับให้ AI ตอบกลับเป็น JSON string ล้วน ๆ
+# (ไม่มีข้อความอื่นปน) — ทำให้ json.loads() ด้านล่างแปลงเป็น dict ได้แน่นอน
+# เงื่อนไข: ต้องมีคำว่า "JSON" อยู่ใน prompt ด้วย ไม่งั้น Azure OpenAI จะ error
 response = client.chat.completions.create(
     model=deployment_name,
     messages=[

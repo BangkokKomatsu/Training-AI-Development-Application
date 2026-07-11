@@ -27,15 +27,17 @@ Rules:
 - If information is missing, list it clearly.
 - Classify the issue as Quality, Delivery, Document, IT, Commercial, or Other.
 - Set priority as Low, Medium, or High.
+- Write "summary" and "recommended_action" in Thai language, so the team on the
+  factory floor can read the result directly without translating it themselves.
 
 Return JSON only with these fields:
 summary, category, priority, missing_information, recommended_action
-pls review the issue report and provide a concise summary, category, priority, any missing information, and recommended action.
-and translate the summary and recommended action into Thai language.
+
 Issue report:
 {issue_report}
 """
 
+# response_format={"type": "json_object"} บังคับให้ AI ตอบกลับเป็น JSON string ล้วน ๆ
 response = client.chat.completions.create(
     model=deployment_name,
     messages=[
@@ -45,7 +47,7 @@ response = client.chat.completions.create(
     response_format={"type": "json_object"},
 )
 
-# Step 1: Parse JSON จาก AI
+# Step 1: Parse JSON จาก AI — content ตอนนี้เป็น string เฉย ๆ ต้องแปลงเป็น dict ก่อนใช้งาน
 result = json.loads(response.choices[0].message.content)
 
 # Step 2: แสดง field แต่ละตัวแบบอ่านง่าย

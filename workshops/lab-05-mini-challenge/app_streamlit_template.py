@@ -48,42 +48,83 @@ def analyze_custom_usecase(user_input):
     )
     return json.loads(response.choices[0].message.content)
 
-# 3. สร้างหน้าเว็บด้วย Streamlit (ให้นักเรียนแก้ UI ในส่วนนี้)
-st.set_page_config(page_title="My Custom AI App", page_icon="✨")
+# 3. ตกแต่งหน้าเว็บด้วย Streamlit (ให้นักเรียนแก้ UI ในส่วนนี้)
+st.set_page_config(page_title="My Custom AI App", page_icon="✨", layout="centered")
 
+# ธีมสี/ฟอนต์ของหน้าเว็บ (ปรับสีได้ตามใจ ไม่จำเป็นต้องเข้าใจ CSS ทั้งหมดก็แก้ไขได้)
+st.markdown("""
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&display=swap');
+
+    html, body, [class*="css"] {
+        font-family: 'Noto Sans Thai', sans-serif;
+    }
+    div[data-testid="stButton"] > button {
+        background-color: #1E3A5F;
+        color: #FFFFFF;
+        border-radius: 8px;
+        border: none;
+        padding: 0.6rem 1.5rem;
+        font-weight: 600;
+        transition: background-color 150ms ease;
+    }
+    div[data-testid="stButton"] > button:hover {
+        background-color: #2563EB;
+        color: #FFFFFF;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# หัวข้อหน้าเว็บ
 st.title("✨ My Custom AI Web App")
-st.markdown("ระบบวิเคราะห์ข้อมูลอัตโนมัติ (แก้ไขชื่อเรื่องและคำอธิบายตรงนี้)")
+st.caption("ระบบวิเคราะห์ข้อมูลอัตโนมัติ (แก้ไขชื่อเรื่องและคำอธิบายตรงนี้)")
+st.divider()
 
-# ช่องกรอกข้อมูล
-input_text = st.text_area("กรอกข้อมูลที่ต้องการให้ AI ประมวลผล:", height=100)
+# ช่องกรอกข้อมูล (ใส่กรอบการ์ดให้ดูเป็นสัดส่วน)
+with st.container(border=True):
+    input_text = st.text_area(
+        "กรอกข้อมูลที่ต้องการให้ AI ประมวลผล:",
+        height=120,
+        placeholder="เช่น พิมพ์ปัญหา/ข้อความที่ต้องการให้ AI วิเคราะห์ที่นี่...",
+    )
+    run_clicked = st.button("🚀 รัน AI Model", type="primary", use_container_width=True)
 
-if st.button("🚀 รัน AI Model", type="primary"):
+if run_clicked:
     if not input_text.strip():
         st.warning("กรุณากรอกข้อมูลก่อน")
     else:
         with st.spinner("AI กำลังทำงาน..."):
             try:
                 result = analyze_custom_usecase(input_text)
-                
+
+                st.divider()
                 st.subheader("📊 ผลลัพธ์จาก AI")
-                
-                # วนลูปดึงค่าตัวแปรทุกตัวจาก JSON ออกมาแสดงผลทีละบรรทัด
+
+                # แสดงระดับความเร่งด่วนเป็นจุดสี (ถ้า field นี้มีอยู่ในผลลัพธ์)
+                PRIORITY_DOT = {"high": "🔴", "medium": "🟡", "low": "🟢"}
+
+                # วนลูปดึงค่าตัวแปรทุกตัวจาก JSON มาแสดงผลทีละใบการ์ด
                 for key, value in result.items():
                     # ปรับชื่อ Key ให้สวยงาม (เช่น my_field -> My Field)
                     formatted_key = key.replace('_', ' ').title()
-                    
-                    st.markdown(f"##### {formatted_key}")
-                    if isinstance(value, dict):
-                        # กรณีที่ Value เป็น JSON ซ้อนข้างใน
-                        for sub_k, sub_v in value.items():
-                            st.info(f"**{sub_k.title()}:** {sub_v}")
-                    else:
-                        # กรณีทั่วไป ให้แสดงผลในการ์ดสีฟ้า
-                        st.info(value)
-                        
+
+                    with st.container(border=True):
+                        if isinstance(value, dict):
+                            # กรณีที่ Value เป็น JSON ซ้อนข้างใน
+                            st.markdown(f"**{formatted_key}**")
+                            for sub_k, sub_v in value.items():
+                                st.markdown(f"- **{sub_k.title()}:** {sub_v}")
+                        elif key.lower() == "priority" and str(value).lower() in PRIORITY_DOT:
+                            dot = PRIORITY_DOT[str(value).lower()]
+                            st.markdown(f"**{formatted_key}:** {dot} {value}")
+                        else:
+                            # กรณีทั่วไป
+                            st.markdown(f"**{formatted_key}**")
+                            st.write(value)
+
                 # ซ่อน JSON ดิบไว้ใน Expander (เผื่ออยากกดดูโค้ดเบื้องหลัง)
                 with st.expander("ดูข้อมูล JSON ต้นฉบับ"):
                     st.json(result)
-                             
+
             except Exception as e:
                 st.error(f"เกิดข้อผิดพลาด: {e}")
