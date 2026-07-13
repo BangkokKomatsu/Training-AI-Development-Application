@@ -23,11 +23,16 @@ def analyze_issue(issue_report):
     Analyze the factory issue report.
 
     Rules:
-    - Classify category as Mechanical, Electrical, QA/QC, Safety/EHS, or Other.
-    - Set priority as Low, Medium, or High.
+    - Do not assume or invent any information that is not in the input.
+    - Choose category only from: Mechanical, Electrical, QA/QC, Safety/EHS, Other.
+    - Set priority as Low, Medium, or High. If the input does not give enough detail to
+      determine priority, use "Unknown" instead of guessing.
+    - List anything needed to classify this issue confidently but missing from the input
+      in the "missing_information" field (empty list if nothing is missing).
+    - Add a "confidence" field: High, Medium, or Low, based on how complete the input is.
 
     Return JSON only with these fields:
-    category, priority, summary
+    category, priority, summary, missing_information, confidence
 
     Issue report:
     {issue_report}
@@ -76,13 +81,19 @@ if uploaded_file is not None:
             
             try:
                 ai_result = analyze_issue(report_text)
+                missing_info = ai_result.get("missing_information") or []
                 results.append({
                     "AI_Category": ai_result.get("category"),
                     "AI_Priority": ai_result.get("priority"),
-                    "AI_Summary": ai_result.get("summary")
+                    "AI_Summary": ai_result.get("summary"),
+                    "AI_Missing_Info": ", ".join(missing_info) if isinstance(missing_info, list) else missing_info,
+                    "AI_Confidence": ai_result.get("confidence")
                 })
             except Exception as e:
-                results.append({"AI_Category": "Error", "AI_Priority": "Error", "AI_Summary": str(e)})
+                results.append({
+                    "AI_Category": "Error", "AI_Priority": "Error", "AI_Summary": str(e),
+                    "AI_Missing_Info": "", "AI_Confidence": ""
+                })
 
             time.sleep(1)  # กันชน Rate Limit เวลาหลายคนรันพร้อมกัน
 

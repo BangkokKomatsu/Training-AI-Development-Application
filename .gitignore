@@ -12,3 +12,6 @@ venv/
 *.pyo
 *.json
 CLAUDE.md
+*.pptx
+slides/
+assessments/
