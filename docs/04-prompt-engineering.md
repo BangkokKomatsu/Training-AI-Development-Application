@@ -77,7 +77,7 @@ User Input: "เซ็นเซอร์ไฟหน้าจอเครื่�
 AI Output: {"category": "Electrical", "priority": "Medium"}
 
 User Input: "พนักงานลืมใส่แว่นตาเซฟตี้ขณะเชื่อมเหล็ก"
-AI Output: {"category": "Safety/EHS", "priority": "High"}
+AI Output: {"category": "Safety", "priority": "High"}
 
 Issue report:
 {issue_report}

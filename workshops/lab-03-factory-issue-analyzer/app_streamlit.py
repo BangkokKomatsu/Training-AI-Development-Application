@@ -21,7 +21,7 @@ def analyze_factory_issue(issue_text):
     Analyze the factory issue report.
     
     Rules:
-    - Classify category as Mechanical, Electrical, QA/QC, Safety/EHS, or Other.
+    - Classify category as Mechanical, Electrical, QA/QC, Safety, or Other.
     - Set priority as Low, Medium, or High.
     - Recommend immediate action and tools to prepare.
     - Draft a short safety warning in Thai.
