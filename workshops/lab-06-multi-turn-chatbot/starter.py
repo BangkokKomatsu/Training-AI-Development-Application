@@ -13,7 +13,7 @@ client = AzureOpenAI(
 deployment_name = os.getenv("AZURE_OPENAI_DEPLOYMENT")
 
 messages = [
-    {"role": "system", "content": "You are a helpful factory assistant at BKC. Keep answers short."}
+    {"role": "system", "content": "คุณเป็นผู้ช่วยประจำโรงงานของ BKC ที่คอยช่วยเหลือผู้ใช้งาน ตอบให้กระชับ"}
 ]
 
 print("Chatbot พร้อมแล้ว พิมพ์ 'exit' หรือ 'quit' เพื่อจบโปรแกรม\n")

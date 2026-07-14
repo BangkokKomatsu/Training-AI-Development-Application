@@ -16,26 +16,26 @@ deployment_name = os.getenv("AZURE_OPENAI_DEPLOYMENT")
 
 def analyze_issue(case_id: str, issue_report: str) -> dict:
     prompt = f"""
-    You are an AI assistant for factory issue management.
+    คุณเป็นผู้ช่วย AI สำหรับจัดการปัญหาในโรงงาน
 
-    Analyze the factory issue report.
+    วิเคราะห์รายงานปัญหาโรงงานด้านล่างนี้
 
     Rules:
-    - Classify category as Mechanical, Electrical, QA/QC, Safety, or Other.
-    - Set priority as Low, Medium, or High.
-    - Recommend immediate action and tools to prepare.
-    - Draft a short safety warning in Thai.
+    - จัดหมวดหมู่ (category) เป็น Mechanical, Electrical, QA/QC, Safety หรือ Other
+    - กำหนดความเร่งด่วน (priority) เป็น Low, Medium หรือ High
+    - แนะนำการดำเนินการเร่งด่วนและเครื่องมือที่ต้องเตรียม
+    - ร่างข้อความเตือนด้านความปลอดภัยสั้นๆ เป็นภาษาไทย
 
-    Return JSON only with these fields:
+    ตอบกลับเป็น JSON เท่านั้น โดยมี field ดังนี้:
     summary, category, priority, recommended_action, tools_needed, safety_warning
 
-    Issue report:
+    รายงานปัญหา:
     {issue_report}
     """
     response = client.chat.completions.create(
         model=deployment_name,
         messages=[
-            {"role": "system", "content": "You are a factory AI assistant. Return JSON only."},
+            {"role": "system", "content": "คุณเป็นผู้ช่วย AI ประจำโรงงาน ตอบกลับเป็น JSON เท่านั้น"},
             {"role": "user", "content": prompt},
         ],
         response_format={ "type": "json_object" }

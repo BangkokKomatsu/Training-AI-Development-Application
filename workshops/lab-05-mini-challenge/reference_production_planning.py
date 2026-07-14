@@ -18,38 +18,37 @@ deployment_name = os.getenv("AZURE_OPENAI_DEPLOYMENT")
 
 def analyze_production_note(user_input):
     prompt = f"""
-    You are an AI assistant for the Production Planning department.
+    คุณเป็นผู้ช่วย AI สำหรับฝ่ายวางแผนการผลิต (Production Planning)
 
     Task:
-    Read an informal daily production note (written by a line supervisor) and
-    summarize it for the planning team.
+    อ่านบันทึกการผลิตประจำวันแบบไม่เป็นทางการ (ที่หัวหน้าไลน์เขียน) แล้วสรุปให้ทีมวางแผน
 
     Context:
-    Line supervisors write short, informal status updates at the end of each shift
-    (e.g. a chat message or handwritten log) instead of filling a formal report. The
-    planning team needs a quick, structured summary to spot risks to tomorrow's schedule.
+    หัวหน้าไลน์มักเขียนสรุปสถานะสั้นๆ แบบไม่เป็นทางการตอนท้ายกะ
+    (เช่น ข้อความแชทหรือบันทึกลายมือ) แทนการกรอกรายงานที่เป็นทางการ ทีมวางแผน
+    ต้องการสรุปแบบมีโครงสร้างอย่างรวดเร็วเพื่อระบุความเสี่ยงต่อแผนงานวันถัดไป
 
     Rules:
-    - Do not assume any information that is not stated in the input.
-    - Identify any bottleneck or risk that could delay the production plan.
-    - List resources needed to resolve the issue, if any
-      (e.g. manpower, spare parts, raw material).
-    - Suggest a recommended action for the planning team.
+    - ห้ามเดาข้อมูลใดๆ ที่ไม่ได้ระบุไว้ในข้อมูลนำเข้า
+    - ระบุคอขวด (bottleneck) หรือความเสี่ยงที่อาจทำให้แผนการผลิตล่าช้า
+    - ระบุทรัพยากรที่ต้องใช้แก้ปัญหา ถ้ามี
+      (เช่น กำลังคน, อะไหล่, วัตถุดิบ)
+    - แนะนำการดำเนินการสำหรับทีมวางแผน
 
     Output format:
-    Return JSON only with these fields:
+    ตอบกลับเป็น JSON เท่านั้น โดยมี field ดังนี้:
     - plan_summary: สรุปสถานการณ์การผลิตแบบสั้น กระชับ
     - bottleneck_risk: ความเสี่ยงที่อาจทำให้แผนล่าช้า (ระบุ "None" ถ้าไม่มี)
     - resource_needed: ทรัพยากรที่ต้องการเพิ่มเติม (list, ว่างได้ถ้าไม่ต้องการ)
     - recommended_action: ข้อเสนอแนะสำหรับทีมวางแผน
 
-    Input text:
+    ข้อความนำเข้า:
     {user_input}
     """
     response = client.chat.completions.create(
         model=deployment_name,
         messages=[
-            {"role": "system", "content": "You are a helpful AI assistant. Return JSON only."},
+            {"role": "system", "content": "คุณเป็นผู้ช่วย AI ที่คอยช่วยเหลือผู้ใช้งาน ตอบกลับเป็น JSON เท่านั้น"},
             {"role": "user", "content": prompt},
         ],
         response_format={ "type": "json_object" }

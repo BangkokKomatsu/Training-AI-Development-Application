@@ -21,19 +21,19 @@ def analyze_issue(issue_report: str) -> dict:
     # -> missing_information, confidence
     # ใบ้: ดูเฉลยเต็มได้จาก app_streamlit.py ในโฟลเดอร์นี้ (มี field พวกนี้อยู่แล้ว) หรือ solution.py
     prompt = f"""
-    You are an AI assistant for factory issue management.
-    Analyze the factory issue report.
+    คุณเป็นผู้ช่วย AI สำหรับจัดการปัญหาในโรงงาน
+    วิเคราะห์รายงานปัญหาโรงงาน
 
     Rules:
-    - Classify category as Mechanical, Electrical, QA/QC, Safety, or Other.
-    - Set priority as Low, Medium, or High.
+    - จัดหมวดหมู่ (category) เป็น Mechanical, Electrical, QA/QC, Safety หรือ Other
+    - กำหนดความเร่งด่วน (priority) เป็น Low, Medium หรือ High
     - [TODO 1: เพิ่มกฎเรื่อง missing_information ที่นี่]
     - [TODO 1: เพิ่มกฎเรื่อง confidence ที่นี่]
 
-    Return JSON only with these fields:
+    ตอบกลับเป็น JSON เท่านั้น โดยมี field ดังนี้:
     category, priority, summary
 
-    Issue report:
+    รายงานปัญหา:
     {issue_report}
     """
     try:
@@ -42,7 +42,7 @@ def analyze_issue(issue_report: str) -> dict:
             # หมายเหตุ: gpt-5-mini ไม่รองรับ temperature/max_tokens
             # ถ้าใช้ gpt-4o สามารถเพิ่ม temperature=0.0 เพื่อผลลัพธ์ที่คงที่ได้
             messages=[
-                {"role": "system", "content": "You are a factory AI assistant. Return JSON only."},
+                {"role": "system", "content": "คุณเป็นผู้ช่วย AI ประจำโรงงาน ตอบกลับเป็น JSON เท่านั้น"},
                 {"role": "user", "content": prompt},
             ],
             response_format={ "type": "json_object" }

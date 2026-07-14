@@ -22,39 +22,38 @@ deployment_name = os.getenv("AZURE_OPENAI_DEPLOYMENT")
 
 def analyze_safety_checklist(user_input):
     prompt = f"""
-    You are an AI assistant for the Safety department.
+    คุณเป็นผู้ช่วย AI สำหรับฝ่ายความปลอดภัย (Safety)
 
     Task:
-    Review an informal work description (written by a worker or supervisor before
-    starting a task) and check whether it shows the basic safety precautions in place.
+    ตรวจสอบคำอธิบายงานแบบไม่เป็นทางการ (ที่คนงานหรือหัวหน้างานเขียนไว้ก่อนเริ่มงาน)
+    ว่ามีมาตรการความปลอดภัยพื้นฐานครบถ้วนหรือไม่
 
     Context:
-    Workers often describe an upcoming task informally (relayed to a supervisor, or a
-    short note) before starting, without going through a formal safety checklist form.
-    This is a pre-work check — the task has not started yet, so this is not an incident
-    report.
+    คนงานมักอธิบายงานที่กำลังจะเริ่มแบบไม่เป็นทางการ (บอกต่อหัวหน้างาน หรือเขียนโน้ตสั้นๆ)
+    ก่อนเริ่มงาน โดยไม่ได้กรอกแบบฟอร์มตรวจสอบความปลอดภัยที่เป็นทางการ นี่คือการตรวจสอบ
+    ก่อนเริ่มงาน (pre-work check) — งานยังไม่ได้เริ่ม จึงไม่ใช่รายงานอุบัติเหตุ
 
     Rules:
-    - Do not assume any precaution that is not stated in the input.
-    - Identify safety precautions or PPE (Personal Protective Equipment) that should normally
-      apply to this type of work but are not mentioned in the input.
-    - Do not classify or rate the severity of any incident — this text describes work about to
-      start, not an incident that already happened.
-    - Suggest what should be confirmed or prepared before the work begins.
+    - ห้ามเดามาตรการป้องกันใดๆ ที่ไม่ได้ระบุไว้ในข้อมูลนำเข้า
+    - ระบุมาตรการความปลอดภัยหรือ PPE (อุปกรณ์ป้องกันส่วนบุคคล) ที่ปกติควรมีสำหรับงานประเภทนี้
+      แต่ไม่ได้ถูกกล่าวถึงในข้อมูลนำเข้า
+    - ห้ามจัดหมวดหมู่หรือประเมินความรุนแรงของอุบัติเหตุ — ข้อความนี้อธิบายงานที่กำลังจะเริ่ม
+      ไม่ใช่อุบัติเหตุที่เกิดขึ้นแล้ว
+    - แนะนำสิ่งที่ควรยืนยันหรือเตรียมก่อนเริ่มงาน
 
     Output format:
-    Return JSON only with these fields:
+    ตอบกลับเป็น JSON เท่านั้น โดยมี field ดังนี้:
     - readiness_status: "Ready" or "Not Ready" or "Cannot Determine"
     - missing_precautions: รายการข้อควรระวัง/PPE ที่ควรมีแต่ไม่ได้ระบุไว้ (list, ว่างได้ถ้าครบ)
     - recommended_action: สิ่งที่ควรยืนยัน/เตรียมก่อนเริ่มงาน
 
-    Input text:
+    ข้อความนำเข้า:
     {user_input}
     """
     response = client.chat.completions.create(
         model=deployment_name,
         messages=[
-            {"role": "system", "content": "You are a helpful AI assistant. Return JSON only."},
+            {"role": "system", "content": "คุณเป็นผู้ช่วย AI ที่คอยช่วยเหลือผู้ใช้งาน ตอบกลับเป็น JSON เท่านั้น"},
             {"role": "user", "content": prompt},
         ],
         response_format={ "type": "json_object" }

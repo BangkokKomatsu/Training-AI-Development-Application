@@ -19,29 +19,29 @@ def analyze_custom_usecase(user_input):
     
     # TODO: ให้นักเรียนเปลี่ยน Prompt ด้านล่างให้เข้ากับโจทย์ของตนเอง
     prompt = f"""
-    You are an AI assistant for the Maintenance department.
-    Your job is to convert an informal maintenance request (written by a factory worker) into a structured work order.
-    Analyze the following text.
+    คุณเป็นผู้ช่วย AI สำหรับฝ่ายซ่อมบำรุง (Maintenance)
+    หน้าที่ของคุณคือแปลงคำขอแจ้งซ่อมแบบไม่เป็นทางการ (ที่พนักงานโรงงานเขียน) ให้เป็นใบสั่งงานซ่อม (work order) ที่มีโครงสร้าง
+    วิเคราะห์ข้อความต่อไปนี้
 
     Rules:
     - [ใส่กฎข้อที่ 1]
     - [ใส่กฎข้อที่ 2]
 
-    Return JSON only with these fields:
+    ตอบกลับเป็น JSON เท่านั้น โดยมี field ดังนี้:
     - work_order_title: สรุปหัวข้องานซ่อมแบบสั้น กระชับ
     - equipment_or_location: เครื่องจักรหรือสถานที่ที่เกี่ยวข้อง
     - priority: ระดับความเร่งด่วน (High, Medium, Low)
     - problem_description: อธิบายปัญหาที่พบโดยละเอียด
     - recommended_action: ข้อเสนอแนะขั้นตอนการซ่อม/แก้ไขเบื้องต้น
 
-    Input text:
+    ข้อความนำเข้า:
     {user_input}
     """
     
     response = client.chat.completions.create(
         model=deployment_name,
         messages=[
-            {"role": "system", "content": "You are a helpful AI assistant. Return JSON only."},
+            {"role": "system", "content": "คุณเป็นผู้ช่วย AI ที่คอยช่วยเหลือผู้ใช้งาน ตอบกลับเป็น JSON เท่านั้น"},
             {"role": "user", "content": prompt},
         ],
         response_format={ "type": "json_object" }

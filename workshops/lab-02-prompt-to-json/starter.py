@@ -16,20 +16,20 @@ deployment_name = os.getenv("AZURE_OPENAI_DEPLOYMENT")
 issue_report = "Supplier XYZ แจ้งว่าส่งของล่าช้า 3 วัน เพราะเครื่องจักรเสีย และยังไม่ยืนยันวันส่งใหม่"
 
 prompt = f"""
-You are an AI assistant for supplier issue management at BKC.
+คุณเป็นผู้ช่วย AI สำหรับจัดการปัญหา Supplier ของ BKC
 
-Analyze the issue report below.
+วิเคราะห์รายงานปัญหาด้านล่างนี้
 
 Rules:
-- Do not assume missing information.
-- If information is missing, list it clearly.
-- Classify the issue as Quality, Delivery, Document, IT, Commercial, or Other.
-- Set priority as Low, Medium, or High.
+- ห้ามเดาข้อมูลที่ขาดหายไป
+- ถ้าข้อมูลขาดหายไป ให้ระบุให้ชัดเจน
+- จัดหมวดหมู่ปัญหาเป็น Quality, Delivery, Document, IT, Commercial หรือ Other
+- กำหนดความเร่งด่วน (priority) เป็น Low, Medium หรือ High
 
-Return JSON only with these fields:
+ตอบกลับเป็น JSON เท่านั้น โดยมี field ดังนี้:
 summary, category, priority, missing_information, recommended_action
 
-Issue report:
+รายงานปัญหา:
 {issue_report}
 """
 
@@ -39,7 +39,7 @@ Issue report:
 response = client.chat.completions.create(
     model=deployment_name,
     messages=[
-        {"role": "system", "content": "You return concise and valid JSON only."},
+        {"role": "system", "content": "คุณตอบกลับเป็น JSON ที่ถูกต้องและกระชับเท่านั้น"},
         {"role": "user", "content": prompt},
     ],
     response_format={"type": "json_object"},

@@ -18,39 +18,37 @@ deployment_name = os.getenv("AZURE_OPENAI_DEPLOYMENT")
 
 def analyze_purchase_request(user_input):
     prompt = f"""
-    You are an AI assistant for the Purchasing department.
+    คุณเป็นผู้ช่วย AI สำหรับฝ่ายจัดซื้อ (Purchasing)
 
     Task:
-    Review an informal purchase request (written by an employee) and check if it's
-    ready to submit for approval.
+    ตรวจสอบคำขอซื้อแบบไม่เป็นทางการ (ที่พนักงานเขียน) ว่าพร้อมส่งขออนุมัติหรือไม่
 
     Context:
-    Employees submit purchase requests as free-text messages (chat/email), not through
-    a structured form. The requests are often written in a hurry and may be missing
-    fields that Purchasing needs before processing.
+    พนักงานส่งคำขอซื้อเป็นข้อความอิสระ (แชท/อีเมล) ไม่ได้กรอกผ่านฟอร์มที่มีโครงสร้าง
+    คำขอมักเขียนขึ้นอย่างรีบเร่งและอาจขาดข้อมูลที่ฝ่ายจัดซื้อต้องใช้ก่อนดำเนินการ
 
     Rules:
-    - Do not assume any information that is not stated in the input.
-    - Identify required fields for a purchase request that are missing
-      (e.g. quantity, budget code, vendor, needed-by date).
-    - Flag a budget concern if the request mentions a high cost or urgent/rush order
-      without justification.
-    - Suggest the next step to move this request forward.
+    - ห้ามเดาข้อมูลใดๆ ที่ไม่ได้ระบุไว้ในข้อมูลนำเข้า
+    - ระบุ field ที่จำเป็นสำหรับคำขอซื้อที่ขาดหายไป
+      (เช่น จำนวน, budget code, vendor, วันที่ต้องการ)
+    - แจ้งเตือนข้อสังเกตเรื่องงบประมาณ ถ้าคำขอกล่าวถึงค่าใช้จ่ายสูงหรือคำสั่งเร่งด่วน
+      โดยไม่มีเหตุผลประกอบ
+    - แนะนำขั้นตอนถัดไปเพื่อผลักดันคำขอนี้ต่อ
 
     Output format:
-    Return JSON only with these fields:
+    ตอบกลับเป็น JSON เท่านั้น โดยมี field ดังนี้:
     - request_status: "Ready" or "Incomplete"
     - missing_fields: รายการข้อมูลที่ขาดหายไป (list, ว่างได้ถ้าครบ)
     - budget_concern: ข้อสังเกตเรื่องงบประมาณ (string, ระบุ "None" ถ้าไม่มี)
     - recommended_next_step: ขั้นตอนถัดไปที่ควรทำ
 
-    Input text:
+    ข้อความนำเข้า:
     {user_input}
     """
     response = client.chat.completions.create(
         model=deployment_name,
         messages=[
-            {"role": "system", "content": "You are a helpful AI assistant. Return JSON only."},
+            {"role": "system", "content": "คุณเป็นผู้ช่วย AI ที่คอยช่วยเหลือผู้ใช้งาน ตอบกลับเป็น JSON เท่านั้น"},
             {"role": "user", "content": prompt},
         ],
         response_format={ "type": "json_object" }

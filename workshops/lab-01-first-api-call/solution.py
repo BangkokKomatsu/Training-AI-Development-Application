@@ -18,7 +18,7 @@ user_input = input("คุณต้องการถามอะไร? > ")
 response = client.chat.completions.create(
     model=deployment_name,
     messages=[
-        {"role": "system", "content": "You are a helpful AI assistant."},
+        {"role": "system", "content": "คุณเป็นผู้ช่วย AI ที่คอยช่วยเหลือผู้ใช้งาน"},
         {"role": "user", "content": user_input},
     ],
     # หมายเหตุ: deployment gpt-5-mini ของ BKC ไม่รองรับ temperature / max_tokens

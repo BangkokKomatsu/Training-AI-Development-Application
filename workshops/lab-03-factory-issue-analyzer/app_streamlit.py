@@ -17,19 +17,19 @@ deployment_name = os.getenv("AZURE_OPENAI_DEPLOYMENT")
 # 2. ฟังก์ชันเรียก AI
 def analyze_factory_issue(issue_text):
     prompt = f"""
-    You are an AI assistant for factory issue management.
-    Analyze the factory issue report.
-    
+    คุณเป็นผู้ช่วย AI สำหรับจัดการปัญหาในโรงงาน
+    วิเคราะห์รายงานปัญหาโรงงาน
+
     Rules:
-    - Classify category as Mechanical, Electrical, QA/QC, Safety, or Other.
-    - Set priority as Low, Medium, or High.
-    - Recommend immediate action and tools to prepare.
-    - Draft a short safety warning in Thai.
-    
-    Return JSON only with these fields:
+    - จัดหมวดหมู่ (category) เป็น Mechanical, Electrical, QA/QC, Safety หรือ Other
+    - กำหนดความเร่งด่วน (priority) เป็น Low, Medium หรือ High
+    - แนะนำการดำเนินการเร่งด่วนและเครื่องมือที่ต้องเตรียม
+    - ร่างข้อความเตือนด้านความปลอดภัยสั้นๆ เป็นภาษาไทย
+
+    ตอบกลับเป็น JSON เท่านั้น โดยมี field ดังนี้:
     summary, category, priority, recommended_action, tools_needed, safety_warning
-    
-    Issue report:
+
+    รายงานปัญหา:
     {issue_text}
     """
     
@@ -38,7 +38,7 @@ def analyze_factory_issue(issue_text):
         # หมายเหตุ: gpt-5-mini ไม่รองรับ temperature/max_tokens
         # ถ้าใช้ gpt-4o สามารถเพิ่ม temperature=0.0 เพื่อผลลัพธ์ที่คงที่ได้
         messages=[
-            {"role": "system", "content": "You are a factory AI assistant. Return JSON only."},
+            {"role": "system", "content": "คุณเป็นผู้ช่วย AI ประจำโรงงาน ตอบกลับเป็น JSON เท่านั้น"},
             {"role": "user", "content": prompt},
         ],
         response_format={ "type": "json_object" }

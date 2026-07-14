@@ -18,107 +18,115 @@ deployment_name = os.getenv("AZURE_OPENAI_DEPLOYMENT")
 
 # 2. Prompt ของแต่ละแผนก/หัวข้อ (เลือกได้จาก dropdown ด้านล่าง)
 # ทุกไฟล์ sample-data ที่ใช้กับหน้านี้ต้องมีคอลัมน์ชื่อ "issue_report" เป็นข้อความที่จะให้ AI วิเคราะห์
-PROMPT_BUILDERS = {
-    "Factory Issue": lambda text: f"""
-    You are an AI assistant for factory issue management.
-    Analyze the factory issue report.
+def build_factory_issue_prompt(text):
+    return f"""
+    คุณเป็นผู้ช่วย AI สำหรับจัดการปัญหาในโรงงาน
+    วิเคราะห์รายงานปัญหาโรงงาน
 
     Rules:
-    - Do not assume or invent any information that is not in the input.
-    - Choose category only from: Mechanical, Electrical, QA/QC, Safety, Other.
-    - Set priority as Low, Medium, or High. If the input does not give enough detail to
-      determine priority, use "Unknown" instead of guessing.
-    - List anything needed to classify this issue confidently but missing from the input
-      in the "missing_information" field (empty list if nothing is missing).
-    - Add a "confidence" field: High, Medium, or Low, based on how complete the input is.
+    - ห้ามเดาหรือแต่งข้อมูลใดๆ ที่ไม่มีอยู่ในข้อมูลนำเข้า
+    - เลือกหมวดหมู่ (category) จากรายการนี้เท่านั้น: Mechanical, Electrical, QA/QC, Safety, Other
+    - กำหนดความเร่งด่วน (priority) เป็น Low, Medium หรือ High ถ้าข้อมูลนำเข้าไม่มีรายละเอียดพอ
+      ที่จะกำหนดความเร่งด่วน ให้ใช้ "Unknown" แทนการเดา
+    - ระบุสิ่งที่จำเป็นต่อการจัดหมวดหมู่ปัญหานี้อย่างมั่นใจแต่ขาดหายไปจากข้อมูลนำเข้า
+      ไว้ใน field "missing_information" (list ว่างได้ถ้าไม่มีอะไรขาด)
+    - เพิ่ม field "confidence": High, Medium หรือ Low ตามความครบถ้วนของข้อมูลนำเข้า
 
-    Return JSON only with these fields:
+    ตอบกลับเป็น JSON เท่านั้น โดยมี field ดังนี้:
     category, priority, summary, missing_information, confidence
 
-    Issue report:
+    รายงานปัญหา:
     {text}
-    """,
-    "Purchasing": lambda text: f"""
-    You are an AI assistant for the Purchasing department.
+    """
+
+def build_purchasing_prompt(text):
+    return f"""
+    คุณเป็นผู้ช่วย AI สำหรับฝ่ายจัดซื้อ (Purchasing)
 
     Task:
-    Review an informal purchase request (written by an employee) and check if it's
-    ready to submit for approval.
+    ตรวจสอบคำขอซื้อแบบไม่เป็นทางการ (ที่พนักงานเขียน) ว่าพร้อมส่งขออนุมัติหรือไม่
 
     Context:
-    Employees submit purchase requests as free-text messages (chat/email), not through
-    a structured form. The requests are often written in a hurry and may be missing
-    fields that Purchasing needs before processing.
+    พนักงานส่งคำขอซื้อเป็นข้อความอิสระ (แชท/อีเมล) ไม่ได้กรอกผ่านฟอร์มที่มีโครงสร้าง
+    คำขอมักเขียนขึ้นอย่างรีบเร่งและอาจขาดข้อมูลที่ฝ่ายจัดซื้อต้องใช้ก่อนดำเนินการ
 
     Rules:
-    - Do not assume any information that is not stated in the input.
-    - Identify required fields for a purchase request that are missing
-      (e.g. quantity, budget code, vendor, needed-by date).
-    - Flag a budget concern if the request mentions a high cost or urgent/rush order
-      without justification.
-    - Suggest the next step to move this request forward.
+    - ห้ามเดาข้อมูลใดๆ ที่ไม่ได้ระบุไว้ในข้อมูลนำเข้า
+    - ระบุ field ที่จำเป็นสำหรับคำขอซื้อที่ขาดหายไป
+      (เช่น จำนวน, budget code, vendor, วันที่ต้องการ)
+    - แจ้งเตือนข้อสังเกตเรื่องงบประมาณ ถ้าคำขอกล่าวถึงค่าใช้จ่ายสูงหรือคำสั่งเร่งด่วน
+      โดยไม่มีเหตุผลประกอบ
+    - แนะนำขั้นตอนถัดไปเพื่อผลักดันคำขอนี้ต่อ
 
     Output format:
-    Return JSON only with these fields:
+    ตอบกลับเป็น JSON เท่านั้น โดยมี field ดังนี้:
     request_status, missing_fields, budget_concern, recommended_next_step
 
-    Input text:
+    ข้อความนำเข้า:
     {text}
-    """,
-    "Production Planning": lambda text: f"""
-    You are an AI assistant for the Production Planning department.
+    """
+
+def build_production_planning_prompt(text):
+    return f"""
+    คุณเป็นผู้ช่วย AI สำหรับฝ่ายวางแผนการผลิต (Production Planning)
 
     Task:
-    Read an informal daily production note (written by a line supervisor) and
-    summarize it for the planning team.
+    อ่านบันทึกการผลิตประจำวันแบบไม่เป็นทางการ (ที่หัวหน้าไลน์เขียน) แล้วสรุปให้ทีมวางแผน
 
     Context:
-    Line supervisors write short, informal status updates at the end of each shift
-    (e.g. a chat message or handwritten log) instead of filling a formal report. The
-    planning team needs a quick, structured summary to spot risks to tomorrow's schedule.
+    หัวหน้าไลน์มักเขียนสรุปสถานะสั้นๆ แบบไม่เป็นทางการตอนท้ายกะ
+    (เช่น ข้อความแชทหรือบันทึกลายมือ) แทนการกรอกรายงานที่เป็นทางการ ทีมวางแผน
+    ต้องการสรุปแบบมีโครงสร้างอย่างรวดเร็วเพื่อระบุความเสี่ยงต่อแผนงานวันถัดไป
 
     Rules:
-    - Do not assume any information that is not stated in the input.
-    - Identify any bottleneck or risk that could delay the production plan.
-    - List resources needed to resolve the issue, if any
-      (e.g. manpower, spare parts, raw material).
-    - Suggest a recommended action for the planning team.
+    - ห้ามเดาข้อมูลใดๆ ที่ไม่ได้ระบุไว้ในข้อมูลนำเข้า
+    - ระบุคอขวด (bottleneck) หรือความเสี่ยงที่อาจทำให้แผนการผลิตล่าช้า
+    - ระบุทรัพยากรที่ต้องใช้แก้ปัญหา ถ้ามี
+      (เช่น กำลังคน, อะไหล่, วัตถุดิบ)
+    - แนะนำการดำเนินการสำหรับทีมวางแผน
 
     Output format:
-    Return JSON only with these fields:
+    ตอบกลับเป็น JSON เท่านั้น โดยมี field ดังนี้:
     plan_summary, bottleneck_risk, resource_needed, recommended_action
 
-    Input text:
+    ข้อความนำเข้า:
     {text}
-    """,
-    "Safety Checklist": lambda text: f"""
-    You are an AI assistant for the Safety department.
+    """
+
+def build_safety_checklist_prompt(text):
+    return f"""
+    คุณเป็นผู้ช่วย AI สำหรับฝ่ายความปลอดภัย (Safety)
 
     Task:
-    Review an informal work description (written by a worker or supervisor before
-    starting a task) and check whether it shows the basic safety precautions in place.
+    ตรวจสอบคำอธิบายงานแบบไม่เป็นทางการ (ที่คนงานหรือหัวหน้างานเขียนไว้ก่อนเริ่มงาน)
+    ว่ามีมาตรการความปลอดภัยพื้นฐานครบถ้วนหรือไม่
 
     Context:
-    Workers often describe an upcoming task informally (relayed to a supervisor, or a
-    short note) before starting, without going through a formal safety checklist form.
-    This is a pre-work check — the task has not started yet, so this is not an incident
-    report.
+    คนงานมักอธิบายงานที่กำลังจะเริ่มแบบไม่เป็นทางการ (บอกต่อหัวหน้างาน หรือเขียนโน้ตสั้นๆ)
+    ก่อนเริ่มงาน โดยไม่ได้กรอกแบบฟอร์มตรวจสอบความปลอดภัยที่เป็นทางการ นี่คือการตรวจสอบ
+    ก่อนเริ่มงาน (pre-work check) — งานยังไม่ได้เริ่ม จึงไม่ใช่รายงานอุบัติเหตุ
 
     Rules:
-    - Do not assume any precaution that is not stated in the input.
-    - Identify safety precautions or PPE (Personal Protective Equipment) that should normally
-      apply to this type of work but are not mentioned in the input.
-    - Do not classify or rate the severity of any incident — this text describes work about to
-      start, not an incident that already happened.
-    - Suggest what should be confirmed or prepared before the work begins.
+    - ห้ามเดามาตรการป้องกันใดๆ ที่ไม่ได้ระบุไว้ในข้อมูลนำเข้า
+    - ระบุมาตรการความปลอดภัยหรือ PPE (อุปกรณ์ป้องกันส่วนบุคคล) ที่ปกติควรมีสำหรับงานประเภทนี้
+      แต่ไม่ได้ถูกกล่าวถึงในข้อมูลนำเข้า
+    - ห้ามจัดหมวดหมู่หรือประเมินความรุนแรงของอุบัติเหตุ — ข้อความนี้อธิบายงานที่กำลังจะเริ่ม
+      ไม่ใช่อุบัติเหตุที่เกิดขึ้นแล้ว
+    - แนะนำสิ่งที่ควรยืนยันหรือเตรียมก่อนเริ่มงาน
 
     Output format:
-    Return JSON only with these fields:
+    ตอบกลับเป็น JSON เท่านั้น โดยมี field ดังนี้:
     readiness_status, missing_precautions, recommended_action
 
-    Input text:
+    ข้อความนำเข้า:
     {text}
-    """,
+    """
+
+PROMPT_BUILDERS = {
+    "Factory Issue": build_factory_issue_prompt,
+    "Purchasing": build_purchasing_prompt,
+    "Production Planning": build_production_planning_prompt,
+    "Safety Checklist": build_safety_checklist_prompt,
 }
 
 SAMPLE_FILE_HINT = {
@@ -134,7 +142,7 @@ def analyze_issue(issue_report, department):
     response = client.chat.completions.create(
         model=deployment_name,
         messages=[
-            {"role": "system", "content": "You are a helpful AI assistant. Return JSON only."},
+            {"role": "system", "content": "คุณเป็นผู้ช่วย AI ที่คอยช่วยเหลือผู้ใช้งาน ตอบกลับเป็น JSON เท่านั้น"},
             {"role": "user", "content": prompt},
         ],
         response_format={ "type": "json_object" }

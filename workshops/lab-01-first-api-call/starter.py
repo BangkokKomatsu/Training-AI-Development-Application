@@ -20,8 +20,8 @@ response = client.chat.completions.create(
     #   - role "system"  = กำหนดบุคลิก/หน้าที่ของ AI (ผู้เรียนไม่เห็นข้อความนี้)
     #   - role "user"    = คำถาม/คำสั่งจากผู้ใช้งานจริง
     messages=[
-        {"role": "system", "content": "You are a helpful AI assistant."},
-        {"role": "user", "content": "Explain what an API key is in simple Thai language."},
+        {"role": "system", "content": "คุณเป็นผู้ช่วย AI ที่คอยช่วยเหลือผู้ใช้งาน"},
+        {"role": "user", "content": "อธิบายว่า API key คืออะไร แบบง่ายๆ เป็นภาษาไทย"},
     ],
 )
 

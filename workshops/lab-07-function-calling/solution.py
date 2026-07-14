@@ -77,7 +77,7 @@ AVAILABLE_FUNCTIONS = {
 }
 
 messages = [
-    {"role": "system", "content": "You are a helpful procurement assistant at BKC."},
+    {"role": "system", "content": "คุณเป็นผู้ช่วยฝ่ายจัดซื้อของ BKC ที่คอยช่วยเหลือผู้ใช้งาน"},
     {
         "role": "user",
         "content": "สถานะของ SUP-001 เป็นอย่างไร และตอนนี้ทีม Procurement มี ticket ที่ยังไม่ปิดกี่ใบ",

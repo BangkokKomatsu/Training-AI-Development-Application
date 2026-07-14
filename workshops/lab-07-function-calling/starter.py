@@ -47,7 +47,7 @@ tools = [
 ]
 
 messages = [
-    {"role": "system", "content": "You are a helpful factory assistant at BKC."},
+    {"role": "system", "content": "คุณเป็นผู้ช่วยประจำโรงงานของ BKC ที่คอยช่วยเหลือผู้ใช้งาน"},
     {"role": "user", "content": "สถานะของเครื่อง MAC-001 ตอนนี้เป็นอย่างไร อุณหภูมิเท่าไหร่"},
 ]
 
