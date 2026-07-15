@@ -31,13 +31,27 @@ streamlit run workshops/lab-05-mini-challenge/reference_safety_checklist.py
 
 ## Task
 
+### ขั้นที่ 1: ออกแบบ Prompt ใน `starter.py` (Terminal)
+
+แก้ไขไฟล์ `starter.py` โดยแทนที่บรรทัด `[TODO: ...]` ทั้งหมดในฟังก์ชัน `analyze_custom_usecase`:
+
+- กำหนด Role ของ AI ให้เข้ากับ Use Case ที่เลือก
+- เพิ่มกฎ (Rules) อย่างน้อย 2 ข้อ
+- ระบุชื่อฟิลด์ JSON ที่ต้องการให้ AI ส่งกลับมา อย่างน้อย 2 ฟิลด์
+- ใส่ข้อความตัวอย่าง (`sample_input`) ที่ตรงกับ Use Case ของคุณ
+
+รันดูผลลัพธ์ใน Terminal ก่อน เพื่อเช็คว่า prompt ให้ผลลัพธ์ตามที่ต้องการแล้วค่อยไปทำหน้าเว็บต่อ:
+
+```bash
+python workshops/lab-05-mini-challenge/starter.py
+```
+
+### ขั้นที่ 2: ทำเป็นหน้าเว็บใน `app_streamlit_template.py`
+
 แก้ไขไฟล์ `app_streamlit_template.py` โดยกำหนด:
 
 - เปลี่ยนชื่อแอป `st.title(...)` และคำอธิบายให้เข้ากับแผนกคุณ
-- แก้ไขตัวแปร `prompt` ในฟังก์ชัน `analyze_custom_usecase`
-  - กำหนด Role ของ AI
-  - กำหนด Rules
-  - ระบุชื่อฟิลด์ JSON ที่ต้องการให้ AI ส่งกลับมา
+- แก้ไขตัวแปร `prompt` ในฟังก์ชัน `analyze_custom_usecase` ด้วย Role, Rules และชื่อฟิลด์ JSON แบบเดียวกับที่ทำใน `starter.py`
 - (Optional) แก้ไขส่วน UI ในการดึงค่า `result` มาจัดรูปแบบใหม่ให้สวยงาม
 
 ## Run

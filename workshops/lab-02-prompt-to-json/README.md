@@ -44,6 +44,15 @@ python workshops/lab-02-prompt-to-json/starter.py
 
 ## Challenge
 
-1. เปิดคอมเมนต์ในส่วน TODO แล้วลอง parse JSON ที่ได้
-2. ลองเปลี่ยน `issue_report` แล้วดูว่า priority และ category เปลี่ยนอย่างไร
-3. ดู `solution.py` เพื่อเห็นว่า JSON ไป routing และบันทึกลงไฟล์อย่างไร
+1. ในไฟล์ `starter.py` หลังบรรทัด `print(raw_output)` ให้เขียนโค้ดเพิ่มเอง:
+   - `result = json.loads(raw_output)` เพื่อแปลง JSON string เป็น Python dict
+   - `print(result["priority"])` และ `print(result["recommended_action"])` เพื่อดึง field ออกมาดู
+2. เขียน logic เพิ่มตาม priority เช่น
+
+   ```python
+   if result["priority"] == "High":
+       print("แจ้ง Supervisor ทันที")
+   ```
+
+3. ลองเปลี่ยน `issue_report` แล้วดูว่า priority และ category เปลี่ยนอย่างไร
+4. ดู `solution.py` เพื่อเห็นว่า JSON ไป routing และบันทึกลงไฟล์อย่างไร

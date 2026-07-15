@@ -25,7 +25,7 @@ def get_machine_status(machine_id: str) -> dict:
     return MACHINE_DB.get(machine_id, {"status": "Unknown", "temperature_celsius": "-"})
 
 
-# TODO 1: เพิ่ม description และ parameter ให้ AI เข้าใจว่าฟังก์ชันนี้ใช้ทำอะไร
+# description และ parameter ให้ AI เข้าใจว่าฟังก์ชันนี้ใช้ทำอะไร
 tools = [
     {
         "type": "function",
@@ -65,11 +65,11 @@ if message.tool_calls:
             args = json.loads(tool_call.function.arguments)
             print(f"[AI ขอเรียกฟังก์ชัน get_machine_status กับ machine_id={args['machine_id']}]")
 
-            # TODO 2: เรียกฟังก์ชันจริงด้วย argument ที่ AI ส่งมา
+            # เรียกฟังก์ชันจริงด้วย argument ที่ AI ส่งมา
             result = get_machine_status(args["machine_id"])
             print(f"[ผลลัพธ์จากฟังก์ชัน: {result}]")
 
-            # TODO 3: ส่ง message ของ AI (ที่มี tool_calls) และผลลัพธ์ฟังก์ชันกลับเข้า messages
+            # ส่ง message ของ AI (ที่มี tool_calls) และผลลัพธ์ฟังก์ชันกลับเข้า messages
             messages.append(message)
             messages.append(
                 {

@@ -23,7 +23,7 @@ while True:
     if user_input.lower() in ("exit", "quit"):
         break
 
-    # TODO 1: append ข้อความของ user เข้า messages ด้วย role "user"
+    # append ข้อความของ user เข้า messages ด้วย role "user"
     messages.append({"role": "user", "content": user_input})
 
     response = client.chat.completions.create(
@@ -34,6 +34,6 @@ while True:
     assistant_reply = response.choices[0].message.content
     print(f"AI: {assistant_reply}\n")
 
-    # TODO 2: append คำตอบของ AI เข้า messages ด้วย role "assistant"
+    # append คำตอบของ AI เข้า messages ด้วย role "assistant"
     # เพื่อให้รอบถัดไป AI ยังจำบทสนทนานี้ได้
     messages.append({"role": "assistant", "content": assistant_reply})

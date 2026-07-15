@@ -25,11 +25,11 @@ prompt = f"""
 Rules:
 - จัดหมวดหมู่ (category) เป็น Mechanical, Electrical, QA/QC, Safety หรือ Other
 - กำหนดความเร่งด่วน (priority) เป็น Low, Medium หรือ High
-- แนะนำการดำเนินการเร่งด่วนและเครื่องมือที่ต้องเตรียม
-- ร่างข้อความเตือนด้านความปลอดภัยสั้นๆ เป็นภาษาไทย
+- [TODO 1: เพิ่มกฎเรื่องการแนะนำการดำเนินการเร่งด่วนและเครื่องมือที่ต้องเตรียม ที่นี่]
+- [TODO 2: เพิ่มกฎเรื่องการร่างข้อความเตือนด้านความปลอดภัยสั้นๆ เป็นภาษาไทย ที่นี่]
 
 ตอบกลับเป็น JSON เท่านั้น โดยมี field ดังนี้:
-summary, category, priority, recommended_action, tools_needed, safety_warning
+summary, category, priority
 
 รายงานปัญหา:
 {issue_report}
@@ -52,10 +52,3 @@ print("=== Factory Issue Analysis ===")
 print(f"Category  : {result.get('category')}")
 print(f"Priority  : {result.get('priority')}")
 print(f"Summary   : {result.get('summary')}")
-print(f"Tools     : {result.get('tools_needed')}")
-print(f"Action    : {result.get('recommended_action')}")
-
-print("\n=== Safety Warning ===")
-print(result.get("safety_warning", ""))
-
-# TODO: ลองเขียนไฟล์ app_streamlit.py เพื่อทำหน้าเว็บ!

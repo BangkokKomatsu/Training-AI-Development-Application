@@ -14,8 +14,8 @@
 
 ## โครงสร้างไฟล์ในโฟลเดอร์นี้
 
-- `starter.py` - สคริปต์รัน Batch Processing บน Terminal ธรรมดา ซึ่งจะอ่าน `factory_issues.json` ประมวลผล และเซฟเป็น `factory_issues_analyzed.xlsx` **มี TODO 3 จุดให้ลองเติมเอง** (ดูหัวข้อ "กิจกรรมท้าทาย" ด้านล่าง)
-- `solution.py` - สคริปต์เฉลยของ TODO ทั้ง 3 จุดใน `starter.py`
+- `starter.py` - สคริปต์รัน Batch Processing บน Terminal ธรรมดา ซึ่งจะอ่าน `factory_issues.json` ประมวลผล และเซฟเป็น `factory_issues_analyzed.xlsx` **มีจุดที่ต้องเติมเองอยู่ 3 จุด** (ดูหัวข้อ "กิจกรรมท้าทาย" ด้านล่าง)
+- `solution.py` - สคริปต์เฉลยของจุดที่ต้องเติมเองทั้ง 3 จุดใน `starter.py`
 - `app_streamlit.py` - หน้าเว็บที่เปิดให้ผู้ใช้เลือกแผนก/หัวข้อข้อมูล แล้วอัปโหลดไฟล์รายงาน (Excel/CSV) ระบบจะประมวลผลแล้วมีปุ่มให้คลิกดาวน์โหลดไฟล์ผลลัพธ์กลับไป **มี TODO 1 จุด** ให้เพิ่มคอลัมน์ Action Required แบบเดียวกับ `starter.py` (ใช้ได้เฉพาะหัวข้อ Factory Issue)
 
 ## วิธีการรัน
@@ -43,9 +43,9 @@ streamlit run workshops/lab-04-factory-issue-batch-excel/app_streamlit.py
 
 ## กิจกรรมท้าทาย (Challenge)
 
-1. **เพิ่ม field ใหม่ใน prompt (TODO 1 ใน `starter.py`):** เพิ่มกฎ `missing_information` และ `confidence` ใน prompt ของฟังก์ชัน `analyze_issue` แล้วดึงค่ามาใส่เป็นคอลัมน์ใหม่ในผลลัพธ์ (ดูตัวอย่างที่ทำไว้แล้วใน `app_streamlit.py`)
-2. **เขียน routing logic เอง (TODO 2 ใน `starter.py`, TODO ใน `app_streamlit.py`):** เขียนฟังก์ชัน `get_action_required(priority)` ที่คืนค่าข้อความว่าควรทำอะไรต่อตามระดับ priority (คล้ายกับ `get_routing_action` ใน Lab 3) แล้วเติมเป็นคอลัมน์ `Action_Required` / `AI_Action_Required`
-3. **ตรวจผลลัพธ์ (TODO 3 ใน `starter.py`):** รันแล้วเปิดไฟล์ Excel ดูว่าคอลัมน์ที่เพิ่มเข้ามาแสดงถูกต้องหรือไม่ ถ้าติดขัดให้เทียบกับ `solution.py`
+1. **เพิ่ม field ใหม่ใน prompt:** ในฟังก์ชัน `analyze_issue` ของ `starter.py` แทนที่บรรทัด `[TODO 1: ...]` ทั้งสองบรรทัดในส่วน Rules ด้วยกฎเรื่อง `missing_information` และ `confidence` แล้วเพิ่มชื่อ field ทั้งสองต่อท้ายบรรทัด `category, priority, summary` จากนั้นดึงค่ามาใส่เป็นคอลัมน์ใหม่ `Missing_Info` และ `Confidence` ในผลลัพธ์ (ดูตัวอย่างที่ทำไว้แล้วใน `app_streamlit.py`)
+2. **เขียน routing logic เอง:** เขียนฟังก์ชัน `get_action_required(priority)` ขึ้นมาเองใน `starter.py` (ยังไม่มีให้) ที่คืนค่าข้อความว่าควรทำอะไรต่อตามระดับ priority (คล้ายกับ `get_routing_action` ใน Lab 3) แล้วเติมเป็นคอลัมน์ `Action_Required` — และทำแบบเดียวกันใน `app_streamlit.py` เป็นคอลัมน์ `AI_Action_Required`
+3. **ตรวจผลลัพธ์:** รันแล้วเปิดไฟล์ Excel ดูว่าคอลัมน์ `Missing_Info`, `Confidence`, `Action_Required` ที่เพิ่มเข้ามาในข้อ 1-2 แสดงถูกต้องหรือไม่ ถ้าติดขัดให้เทียบกับ `solution.py`
 4. **เพิ่มข้อมูลทดสอบ:** ลองเปิดไฟล์ `sample-data/factory_issues.json` แล้วเพิ่มเคสใหม่เข้าไปอีก 2-3 เคส จากนั้นรัน `starter.py` หรืออัปโหลดไฟล์ในเว็บใหม่ เพื่อดูว่า AI สามารถประมวลผลเพิ่มได้ตามที่เราใส่ไปหรือไม่
 5. **ปรับโค้ดการดาวน์โหลด:** สังเกตโค้ดใน `app_streamlit.py` ที่ใช้ `io.BytesIO()` และ `st.download_button()` นี่คือเทคนิคการเซฟไฟล์ Excel ลงบนเว็บโดยไม่ต้องสร้างไฟล์จริงบนเซิร์ฟเวอร์!
 6. **ลองสลับแผนก:** เปิด `app_streamlit.py` ดู dict `PROMPT_BUILDERS` — สังเกตว่า prompt ของแต่ละแผนก (Purchasing, Production Planning, Safety Checklist) ใช้โครงสร้าง Role/Task/Context/Rules/Output Format เหมือนกันหมด (ดูหลักการได้ใน `docs/04-prompt-engineering.md`) ต่างกันแค่เนื้อหา ลองเพิ่มแผนกที่ 5 ของตัวเองเข้าไปใน dict นี้ดู แล้วทำไฟล์ sample CSV คอลัมน์ `issue_report` มาทดสอบ

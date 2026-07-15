@@ -78,44 +78,53 @@ AVAILABLE_FUNCTIONS = {
 
 messages = [
     {"role": "system", "content": "คุณเป็นผู้ช่วยฝ่ายจัดซื้อของ BKC ที่คอยช่วยเหลือผู้ใช้งาน"},
-    {
-        "role": "user",
-        "content": "สถานะของ SUP-001 เป็นอย่างไร และตอนนี้ทีม Procurement มี ticket ที่ยังไม่ปิดกี่ใบ",
-    },
 ]
 
-response = client.chat.completions.create(
-    model=deployment_name,
-    messages=messages,
-    tools=tools,
-)
+print("Chatbot พร้อมแล้ว พิมพ์ 'exit' หรือ 'quit' เพื่อจบโปรแกรม")
+print("ตัวอย่างคำถาม: สถานะของ SUP-001 เป็นอย่างไร และตอนนี้ทีม Procurement มี ticket ที่ยังไม่ปิดกี่ใบ\n")
 
-message = response.choices[0].message
+while True:
+    user_input = input("You: ")
+    if user_input.lower() in ("exit", "quit"):
+        break
 
-if message.tool_calls:
-    messages.append(message)
+    messages.append({"role": "user", "content": user_input})
 
-    for tool_call in message.tool_calls:
-        function_name = tool_call.function.name
-        args = json.loads(tool_call.function.arguments)
-        print(f"[AI ขอเรียกฟังก์ชัน {function_name} ด้วย {args}]")
-
-        function_to_call = AVAILABLE_FUNCTIONS[function_name]
-        result = function_to_call(**args)
-        print(f"[ผลลัพธ์: {result}]")
-
-        messages.append(
-            {
-                "role": "tool",
-                "tool_call_id": tool_call.id,
-                "content": json.dumps(result),
-            }
-        )
-
-    final_response = client.chat.completions.create(
+    response = client.chat.completions.create(
         model=deployment_name,
         messages=messages,
+        tools=tools,
     )
-    print("\nAI:", final_response.choices[0].message.content)
-else:
-    print("\nAI:", message.content)
+
+    message = response.choices[0].message
+
+    if message.tool_calls:
+        messages.append(message)
+
+        for tool_call in message.tool_calls:
+            function_name = tool_call.function.name
+            args = json.loads(tool_call.function.arguments)
+            print(f"[AI ขอเรียกฟังก์ชัน {function_name} ด้วย {args}]")
+
+            function_to_call = AVAILABLE_FUNCTIONS[function_name]
+            result = function_to_call(**args)
+            print(f"[ผลลัพธ์: {result}]")
+
+            messages.append(
+                {
+                    "role": "tool",
+                    "tool_call_id": tool_call.id,
+                    "content": json.dumps(result),
+                }
+            )
+
+        final_response = client.chat.completions.create(
+            model=deployment_name,
+            messages=messages,
+        )
+        assistant_reply = final_response.choices[0].message.content
+    else:
+        assistant_reply = message.content
+
+    print(f"\nAI: {assistant_reply}\n")
+    messages.append({"role": "assistant", "content": assistant_reply})

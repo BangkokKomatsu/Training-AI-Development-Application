@@ -44,6 +44,12 @@ AI สรุปคำตอบสุดท้ายเป็นภาษาท�
 python workshops/lab-07-function-calling/starter.py
 ```
 
+`starter.py` ถามคำถามเดียวจบแล้วปิดโปรแกรม ส่วน `solution.py` ต่อยอดเป็นแชทแบบคุยได้หลายรอบ (เหมือน Lab 6) และมี 2 ฟังก์ชันให้ AI เลือกเรียก (`get_supplier_status`, `get_open_ticket_count`):
+
+```bash
+python workshops/lab-07-function-calling/solution.py
+```
+
 ## Challenge
 
 1. ลองถาม machine_id อื่น เช่น `MAC-002`, `MAC-003` และ id ที่ไม่มีในฐานข้อมูล เช่น `MAC-999`

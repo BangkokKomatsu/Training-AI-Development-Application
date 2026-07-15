@@ -49,12 +49,3 @@ response = client.chat.completions.create(
 raw_output = response.choices[0].message.content
 print("=== Raw AI Output ===")
 print(raw_output)
-
-# Step 2: TODO — ลอง parse JSON แล้วดึง field แต่ละตัวออกมา
-# result = json.loads(raw_output)
-# print(result["priority"])
-# print(result["recommended_action"])
-
-# Step 3: TODO — ลองเพิ่ม logic ตาม priority
-# if result["priority"] == "High":
-#     print("แจ้ง Supervisor ทันที")
