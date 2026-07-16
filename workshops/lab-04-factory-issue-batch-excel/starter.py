@@ -1,6 +1,7 @@
 import json
 import os
 import time
+from pathlib import Path
 import pandas as pd
 from dotenv import load_dotenv
 from openai import AzureOpenAI
@@ -14,6 +15,8 @@ client = AzureOpenAI(
 )
 
 deployment_name = os.getenv("AZURE_OPENAI_DEPLOYMENT")
+
+BASE_DIR = Path(__file__).resolve().parent
 
 def analyze_issue(issue_report: str) -> dict:
     prompt = f"""
@@ -51,7 +54,7 @@ def analyze_issue(issue_report: str) -> dict:
         }
 
 # 1. โหลดข้อมูลจากไฟล์ JSON (สมมุติว่าเป็นข้อมูลที่ดึงมาจากระบบ ERP หรือตาราง)
-with open("../../sample-data/factory_issues.json", encoding="utf-8") as f:
+with open(BASE_DIR / "../../sample-data/factory_issues.json", encoding="utf-8") as f:
     data = json.load(f)
 
 # แปลงเป็น DataFrame ของ Pandas
@@ -76,7 +79,7 @@ result_df = pd.DataFrame(results)
 df = pd.concat([df, result_df], axis=1)
 
 # 4. บันทึกลงไฟล์ Excel
-output_file = "factory_issues_analyzed.xlsx"
+output_file = BASE_DIR / "factory_issues_analyzed.xlsx"
 df.to_excel(output_file, index=False)
 
 print(f"\nประมวลผลเสร็จสิ้น! บันทึกผลลัพธ์ลงไฟล์ {output_file} เรียบร้อยแล้ว")

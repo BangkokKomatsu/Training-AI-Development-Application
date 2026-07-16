@@ -1,6 +1,7 @@
 import json
 import os
 from datetime import datetime
+from pathlib import Path
 from dotenv import load_dotenv
 from openai import AzureOpenAI
 
@@ -13,6 +14,8 @@ client = AzureOpenAI(
 )
 
 deployment_name = os.getenv("AZURE_OPENAI_DEPLOYMENT")
+
+BASE_DIR = Path(__file__).resolve().parent
 
 def analyze_issue(case_id: str, issue_report: str) -> dict:
     prompt = f"""
@@ -53,7 +56,7 @@ def get_routing_action(priority: str) -> str:
     return "บันทึกใน Log ประจำวัน + ตรวจสอบในรอบถัดไป"
 
 # Load cases from sample data
-with open("../../sample-data/factory_issues.json", encoding="utf-8") as f:
+with open(BASE_DIR / "../../sample-data/factory_issues.json", encoding="utf-8") as f:
     cases = json.load(f)
 
 all_results = []
@@ -73,7 +76,7 @@ for case in cases[:3]: # ทดสอบ 3 เคสแรก
     print(f"  Action   : {result.get('recommended_action')}")
     print(f"\n  Routing  --> {get_routing_action(result.get('priority', 'Low'))}")
 
-output_path = "factory_issues_output.json"
+output_path = BASE_DIR / "factory_issues_output.json"
 with open(output_path, "w", encoding="utf-8") as f:
     json.dump(all_results, f, ensure_ascii=False, indent=2)
 

@@ -21,7 +21,7 @@ response = client.chat.completions.create(
         {"role": "system", "content": "คุณเป็นผู้ช่วย AI ที่คอยช่วยเหลือผู้ใช้งาน"},
         {"role": "user", "content": user_input},
     ],
-    # หมายเหตุ: deployment gpt-5-mini ของ BKC ไม่รองรับ temperature / max_tokens
+
 )
 
 print("คำตอบของ AI:", response.choices[0].message.content)

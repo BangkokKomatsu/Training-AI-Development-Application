@@ -79,7 +79,11 @@
 │   ├── 08-multi-turn-conversation.md
 │   └── 09-function-calling.md
 ├── sample-data/
-│   └── factory_issues.json
+│   ├── factory_issues.json
+│   ├── factory_issues_sample.xlsx
+│   ├── purchase_requests_sample.csv
+│   ├── production_notes_sample.csv
+│   └── safety_checklist_notes_sample.csv
 └── workshops/
     ├── README.md
     ├── lab-01-first-api-call/

@@ -21,7 +21,7 @@ deployment_name = os.getenv("AZURE_OPENAI_DEPLOYMENT")
 def build_factory_issue_prompt(text):
     return f"""
     คุณเป็นผู้ช่วย AI สำหรับจัดการปัญหาในโรงงาน
-    วิเคราะห์รายงานปัญหาโรงงาน
+    วิเคราะห์รายงานปัญหาที่เกิดขึ้นในโรงงาน
 
     Rules:
     - ห้ามเดาหรือแต่งข้อมูลใดๆ ที่ไม่มีอยู่ในข้อมูลนำเข้า
