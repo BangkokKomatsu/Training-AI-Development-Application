@@ -25,3 +25,5 @@ python workshops/lab-01-first-api-call/starter.py
 ## Expected Output
 
 AI ควรตอบข้อความสั้น ๆ เพื่ออธิบายว่า API Key คืออะไร
+
+-- key
