@@ -10,7 +10,7 @@
 2. นำฟังก์ชัน AI มาเรียกใช้แบบลูป (Loop) เพื่อประมวลผลข้อมูลหลายแถว
 3. ทราบถึงวิธีแสดงผลการประมวลผลเป็นหน้าเว็บด้วย Streamlit Dataframe
 4. ฝึกเพิ่ม field ใหม่ใน prompt และเขียน logic แยกกรณีตาม priority ที่ AI วิเคราะห์ออกมา (ต่อยอดจาก Lab 3)
-5. เห็นตัวอย่างการนำ prompt เดียวกันไปใช้กับหลายแผนก/หัวข้อข้อมูล (Factory Issue, Purchasing, Production Planning, Safety Checklist) ผ่าน dropdown เลือกหัวข้อใน `app_streamlit.py`
+5. เห็นตัวอย่างการนำ prompt เดียวกันไปใช้กับหลายแผนก/หัวข้อข้อมูล (Factory Issue, Purchasing, Production Planning, Safety Checklist, Accounting, Logistics & Warehouse) ผ่าน dropdown เลือกหัวข้อใน `app_streamlit.py`
 
 ## โครงสร้างไฟล์ในโฟลเดอร์นี้
 
@@ -38,6 +38,8 @@ streamlit run workshops/lab-04-factory-issue-batch-excel/app_streamlit.py
 | Purchasing | `sample-data/purchase_requests_sample.csv` |
 | Production Planning | `sample-data/production_notes_sample.csv` |
 | Safety Checklist | `sample-data/safety_checklist_notes_sample.csv` |
+| Accounting | `sample-data/accounting_invoices_sample.csv` |
+| Logistics & Warehouse | `sample-data/logistics_warehouse_sample.csv` |
 
 *(ทุกไฟล์ตัวอย่างมีคอลัมน์ชื่อ `issue_report` เป็นข้อความที่จะให้ AI วิเคราะห์ ไม่ว่าจะเป็นหัวข้อไหนก็ตาม)*
 
@@ -48,4 +50,4 @@ streamlit run workshops/lab-04-factory-issue-batch-excel/app_streamlit.py
 3. **ตรวจผลลัพธ์:** รันแล้วเปิดไฟล์ Excel ดูว่าคอลัมน์ `Missing_Info`, `Confidence`, `Action_Required` ที่เพิ่มเข้ามาในข้อ 1-2 แสดงถูกต้องหรือไม่ ถ้าติดขัดให้เทียบกับ `solution.py`
 4. **เพิ่มข้อมูลทดสอบ:** ลองเปิดไฟล์ `sample-data/factory_issues.json` แล้วเพิ่มเคสใหม่เข้าไปอีก 2-3 เคส จากนั้นรัน `starter.py` หรืออัปโหลดไฟล์ในเว็บใหม่ เพื่อดูว่า AI สามารถประมวลผลเพิ่มได้ตามที่เราใส่ไปหรือไม่
 5. **ปรับโค้ดการดาวน์โหลด:** สังเกตโค้ดใน `app_streamlit.py` ที่ใช้ `io.BytesIO()` และ `st.download_button()` นี่คือเทคนิคการเซฟไฟล์ Excel ลงบนเว็บโดยไม่ต้องสร้างไฟล์จริงบนเซิร์ฟเวอร์!
-6. **ลองสลับแผนก:** เปิด `app_streamlit.py` ดู dict `PROMPT_BUILDERS` — สังเกตว่า prompt ของแต่ละแผนก (Purchasing, Production Planning, Safety Checklist) ใช้โครงสร้าง Role/Task/Context/Rules/Output Format เหมือนกันหมด (ดูหลักการได้ใน `docs/04-prompt-engineering.md`) ต่างกันแค่เนื้อหา ลองเพิ่มแผนกที่ 5 ของตัวเองเข้าไปใน dict นี้ดู แล้วทำไฟล์ sample CSV คอลัมน์ `issue_report` มาทดสอบ
+6. **ลองสลับแผนก:** เปิด `app_streamlit.py` ดู dict `PROMPT_BUILDERS` — สังเกตว่า prompt ของแต่ละแผนก (Purchasing, Production Planning, Safety Checklist, Accounting, Logistics & Warehouse) ใช้โครงสร้าง Role/Task/Context/Rules/Output Format เหมือนกันหมด (ดูหลักการได้ใน `docs/04-prompt-engineering.md`) ต่างกันแค่เนื้อหา ลองเพิ่มแผนกของตัวเองเข้าไปใน dict นี้ดู (ตอนนี้มีอยู่แล้ว 6 แผนก) แล้วทำไฟล์ sample CSV คอลัมน์ `issue_report` มาทดสอบ

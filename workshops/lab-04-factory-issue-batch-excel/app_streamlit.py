@@ -122,11 +122,69 @@ def build_safety_checklist_prompt(text):
     {text}
     """
 
+def build_accounting_prompt(text):
+    return f"""
+    คุณเป็นผู้ช่วย AI สำหรับฝ่ายบัญชี (Accounting)
+
+    Task:
+    ตรวจสอบใบแจ้งหนี้หรือใบขอเบิกแบบไม่เป็นทางการ (ที่พนักงานสรุปมาให้) ว่าพร้อมตั้งเบิกจ่ายหรือไม่
+
+    Context:
+    พนักงานมักส่งรายละเอียดใบแจ้งหนี้หรือใบขอเบิกเป็นข้อความสรุป (แชท/อีเมล) แทนการกรอกผ่านระบบบัญชี
+    โดยตรง ฝ่ายบัญชีต้องเช็คว่ายอดเงินตรงกับ PO และเอกสารประกอบครบก่อนดำเนินการตั้งเบิก
+
+    Rules:
+    - ห้ามเดาข้อมูลใดๆ ที่ไม่ได้ระบุไว้ในข้อมูลนำเข้า
+    - ถ้ามีการระบุยอดใน PO และยอดในใบแจ้งหนี้ไม่ตรงกัน ให้ระบุส่วนต่างไว้ใน field "amount_mismatch"
+      (ระบุ "None" ถ้าไม่มีการระบุ PO หรือยอดตรงกัน)
+    - ระบุเอกสารประกอบที่ควรมีแต่ไม่ได้กล่าวถึงในข้อมูลนำเข้า
+      (เช่น ใบกำกับภาษี, ใบส่งของ, ใบเสร็จรับเงิน)
+    - แนะนำขั้นตอนถัดไปก่อนตั้งเบิกจ่าย
+
+    Output format:
+    ตอบกลับเป็น JSON เท่านั้น โดยมี field ดังนี้:
+    invoice_status, amount_mismatch, missing_documents, recommended_next_step
+
+    ข้อความนำเข้า:
+    {text}
+    """
+
+def build_logistics_warehouse_prompt(text):
+    return f"""
+    คุณเป็นผู้ช่วย AI สำหรับฝ่ายโลจิสติกส์และคลังสินค้า (Logistics & Warehouse)
+
+    Task:
+    ตรวจสอบบันทึกการรับสินค้าเข้าคลังแบบไม่เป็นทางการ (ที่พนักงานคลังเขียนตอนรับของ)
+    ว่าพร้อมบันทึกรับเข้าสต๊อกในระบบหรือไม่
+
+    Context:
+    พนักงานคลังมักเขียนบันทึกสั้นๆ ตอนรับสินค้าเข้า (จำนวนที่ได้รับ, สภาพสินค้า) ก่อนที่จะกรอกเข้าระบบ
+    WMS/ERP อย่างเป็นทางการ ต้องเช็คว่าจำนวนที่ได้รับตรงกับที่สั่งไหม และมีความเสียหายไหม ก่อนบันทึก
+    รับเข้าสต๊อก
+
+    Rules:
+    - ห้ามเดาข้อมูลใดๆ ที่ไม่ได้ระบุไว้ในข้อมูลนำเข้า
+    - ถ้าจำนวนที่ได้รับไม่ตรงกับจำนวนที่สั่ง ให้ระบุส่วนต่างไว้ใน field "quantity_discrepancy"
+      (ระบุ "None" ถ้าไม่มีการระบุจำนวนที่สั่ง หรือจำนวนตรงกัน)
+    - ระบุความเสียหายหรือปัญหาสภาพสินค้าที่พบ ถ้ามี (ระบุ "None" ถ้าไม่มี)
+    - แนะนำขั้นตอนถัดไปก่อนบันทึกรับเข้าสต๊อก
+      (เช่น ต้องแจ้ง Supplier, ต้องถ่ายรูปหลักฐาน, ต้องแยกของเสียออกก่อนนับ)
+
+    Output format:
+    ตอบกลับเป็น JSON เท่านั้น โดยมี field ดังนี้:
+    receiving_status, quantity_discrepancy, damage_note, recommended_next_step
+
+    ข้อความนำเข้า:
+    {text}
+    """
+
 PROMPT_BUILDERS = {
     "Factory Issue": build_factory_issue_prompt,
     "Purchasing": build_purchasing_prompt,
     "Production Planning": build_production_planning_prompt,
     "Safety Checklist": build_safety_checklist_prompt,
+    "Accounting": build_accounting_prompt,
+    "Logistics & Warehouse": build_logistics_warehouse_prompt,
 }
 
 SAMPLE_FILE_HINT = {
@@ -134,6 +192,8 @@ SAMPLE_FILE_HINT = {
     "Purchasing": "sample-data/purchase_requests_sample.csv",
     "Production Planning": "sample-data/production_notes_sample.csv",
     "Safety Checklist": "sample-data/safety_checklist_notes_sample.csv",
+    "Accounting": "sample-data/accounting_invoices_sample.csv",
+    "Logistics & Warehouse": "sample-data/logistics_warehouse_sample.csv",
 }
 
 # 3. ฟังก์ชันวิเคราะห์ปัญหา

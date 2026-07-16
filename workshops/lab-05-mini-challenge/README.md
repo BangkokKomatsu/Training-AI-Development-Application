@@ -11,11 +11,15 @@
 - `reference_procurement.py` - AI ตรวจสอบคำขอซื้อว่าข้อมูลครบก่อนส่งอนุมัติหรือไม่ (งานจัดซื้อ)
 - `reference_production_planning.py` - AI สรุปบันทึกหน้างานประจำวันให้ทีมวางแผนการผลิต (งานวางแผนการผลิต)
 - `reference_safety_checklist.py` - AI ตรวจสอบความพร้อมด้านความปลอดภัย**ก่อน**เริ่มงาน (งาน Safety มุม pre-work checklist — คนละมุมกับตัวเลือกข้อ 2 ด้านล่างที่เป็นการจัดหมวดหมู่อุบัติเหตุที่**เกิดขึ้นแล้ว** จึงยังเลือกทำข้อ 2 เป็น mini challenge ได้ตามปกติ)
+- `reference_accounting.py` - AI ตรวจสอบใบแจ้งหนี้/ใบขอเบิกว่ายอดเงินตรงกับ PO และเอกสารครบก่อนตั้งเบิกจ่ายหรือไม่ (งานบัญชี)
+- `reference_logistics_warehouse.py` - AI ตรวจสอบบันทึกรับสินค้าเข้าคลัง**ก่อน**บันทึกเข้าสต๊อก (งานคลังสินค้า มุม goods receiving check — คนละมุมกับตัวเลือกข้อ 4 ด้านล่างที่เป็นการสรุปปัญหาสินค้าล่าช้าที่**เกิดขึ้นแล้ว** จึงยังเลือกทำข้อ 4 เป็น mini challenge ได้ตามปกติ)
 
 ```bash
 streamlit run workshops/lab-05-mini-challenge/reference_procurement.py
 streamlit run workshops/lab-05-mini-challenge/reference_production_planning.py
 streamlit run workshops/lab-05-mini-challenge/reference_safety_checklist.py
+streamlit run workshops/lab-05-mini-challenge/reference_accounting.py
+streamlit run workshops/lab-05-mini-challenge/reference_logistics_warehouse.py
 ```
 
 ไฟล์เหล่านี้เป็น**ตัวอย่างสำเร็จรูป** ไม่ใช่โจทย์ที่ต้องเลือกทำ (หัวข้อของคุณเองให้เลือกจากลิสต์ด้านล่าง)
